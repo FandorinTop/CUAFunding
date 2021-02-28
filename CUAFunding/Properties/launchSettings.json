@@ -1,12 +1,5 @@
 ﻿{
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:59827",
-      "sslPort": 44328
-    }
-  },
+  
   "profiles": {
     "CUAFunding_Development": {
       "commandName": "Project",

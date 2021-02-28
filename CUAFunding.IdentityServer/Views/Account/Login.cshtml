@@ -1,0 +1,46 @@
+﻿@model CUAFunding.ViewModels.AccountViewModel.LoginAccountView
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<h4>LoginAccountView</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label hidden asp-for="ReturnUrl" class="control-label"></label>
+                <input hidden asp-for="ReturnUrl" class="form-control" />
+                <span asp-validation-for="ReturnUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <form class="form-group" asp-action="ExternalSignin" asp-route-returnUrl="@Model.ReturnUrl">
+        @foreach (var provider in Model.ExternalProviders)
+        {
+            <button type="submit" name="provider" value="@provider.Name">@provider.DisplayName</button>
+        }
+    </form>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

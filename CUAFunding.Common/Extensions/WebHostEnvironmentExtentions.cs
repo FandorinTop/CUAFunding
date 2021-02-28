@@ -13,6 +13,7 @@ namespace CUAFunding.Common.Extensions
             {
                 return true;
             }
+
             return false;
         }
     }
