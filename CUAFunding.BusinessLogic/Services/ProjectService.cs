@@ -1,18 +1,18 @@
 ﻿using CUAFunding.Common.Exceptions;
-using CUAFunding.Common.Mappers;
 using CUAFunding.DomainEntities.Entities;
+using CUAFunding.DomainEntities.Enums;
+using CUAFunding.Interfaces.BussinessLogic.Providers;
 using CUAFunding.Interfaces.BussinessLogic.Services;
 using CUAFunding.Interfaces.Mappers;
 using CUAFunding.Interfaces.Repository;
 using CUAFunding.ViewModels;
 using CUAFunding.ViewModels.ProjectViewModel;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CUAFunding.BusinessLogic.Services
@@ -22,12 +22,17 @@ namespace CUAFunding.BusinessLogic.Services
         private IProjectRepository _projectRepository;
         private IProjectMapper _projectMapper;
         private IHttpContextAccessor _httpContextAccessor;
+        private IFileServerProvider _fileServerProvider;
+        private IWebHostEnvironment _hostingEnvironment;
 
-        public ProjectService(IProjectRepository projectRepository, IProjectMapper projectMapper, IHttpContextAccessor httpContextAccessor)
+
+        public ProjectService(IProjectRepository projectRepository, IProjectMapper projectMapper, IHttpContextAccessor httpContextAccessor, IFileServerProvider fileServerProvider, IWebHostEnvironment hostingEnvironment)
         {
             _projectRepository = projectRepository;
             _projectMapper = projectMapper;
             _httpContextAccessor = httpContextAccessor;
+            _fileServerProvider = fileServerProvider;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public async Task<Guid> CreateProject(CreateProjectViewModel viewModel)
@@ -35,7 +40,7 @@ namespace CUAFunding.BusinessLogic.Services
             var userId = GetUserId();
             viewModel.OwnerId = new Guid(userId);
             if (String.IsNullOrEmpty(userId))
-            {                
+            {
                 throw new AuthorizationException("User is not authorize");
             }
 
@@ -59,7 +64,7 @@ namespace CUAFunding.BusinessLogic.Services
             viewModel.OwnerId = new Guid(userId);
 
             var project = await _projectRepository.Find(viewModel.Id);
-            var res = CheckUserId(viewModel.Id, project);
+            await CheckUserId(viewModel.Id, project);
 
             project = _projectMapper.Edit(project, viewModel);
             await _projectRepository.Update(project);
@@ -72,16 +77,41 @@ namespace CUAFunding.BusinessLogic.Services
             var rating = await _projectRepository.GetRanting(Id);
 
             var res = _projectMapper.Show(project, collected, rating);
-            
+
             return res;
         }
 
         public Task<ApiResult<ShowProjectViewModel>> ShowProjects(int pageIndex, int pageSiez, string sortColumn = null, string sortOrder = null, string filterColumn = null, string filterQuery = null)
         {
-            var userId = GetUserId();
-            var result = _projectRepository.GetApiResult(pageIndex, pageSiez, sortColumn, sortOrder, filterColumn, filterQuery);
+            var result = _projectRepository
+                .GetApiResult(pageIndex, pageSiez, sortColumn, sortOrder, filterColumn, filterQuery);
 
             return result;
+        }
+
+        public async Task ChangeProjectImage(Guid Id, IFormFile file)
+        {
+            var path = string.Empty;
+            var project = await _projectRepository.Find(Id);
+            var userId = new Guid(GetUserId());
+
+            await CheckUserId(userId, project);
+
+            if (project == null)
+            {
+                throw new Exception();
+            }
+            if (file != null)
+            {
+                path = await _fileServerProvider.LoadFilesAsync(Path.Combine(GetCurrentDirectory(), $"//{project.Title ?? "Unanamed"}//"), file, new List<EnalableFileExtensionTypes>() { EnalableFileExtensionTypes.jpg, EnalableFileExtensionTypes.jpeg, EnalableFileExtensionTypes.png });
+            }
+            if (!String.IsNullOrEmpty(project.ImagePath))
+            {
+                await _fileServerProvider.DeleteFileAsync(project.ImagePath);
+            }
+
+            project.ImagePath = path;
+            await _projectRepository.Update(project);
         }
 
         private Task CheckUserId(Guid Id, Project project)
@@ -99,9 +129,15 @@ namespace CUAFunding.BusinessLogic.Services
 
             return Task.CompletedTask;
         }
+
         private string GetUserId()
         {
             return _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        }
+
+        private string GetCurrentDirectory()
+        {
+            return _hostingEnvironment.ContentRootPath;
         }
     }
 }

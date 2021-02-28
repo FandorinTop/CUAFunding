@@ -23,12 +23,13 @@ namespace CUAFunding.BusinessLogic.Providers
                 if (fileExtention.Contains(fileExt))
                 {
                     var filePath = Path.GetTempFileName();
-                    filePath = System.IO.File.Exists(filePath)
+                    filePath = File.Exists(filePath)
                         ? filePath.Replace(Path.GetExtension(filePath), fileExt)
                         : filePath.Replace(Path.GetExtension(filePath), "_UploadedTime:" + DateTime.Now.ToShortTimeString() + fileExt);
 
                     var path = Path.Combine(FolderPath, filePath);
                     await LoadFilesAsync(path, file, extention);
+               
                     return path;
                 }
             }

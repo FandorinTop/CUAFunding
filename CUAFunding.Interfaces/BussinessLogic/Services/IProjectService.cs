@@ -1,5 +1,6 @@
 ﻿using CUAFunding.ViewModels;
 using CUAFunding.ViewModels.ProjectViewModel;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,6 +20,7 @@ namespace CUAFunding.Interfaces.BussinessLogic.Services
             string filterQuery = null);
         Task<Guid> CreateProject(CreateProjectViewModel viewModel);
         Task EditProject(EditProjectViewModel viewModel);
+        Task ChangeProjectImage(Guid Id, IFormFile file);
         Task DeleteProject(Guid Id);
     }
 }

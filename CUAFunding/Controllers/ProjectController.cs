@@ -4,6 +4,7 @@ using CUAFunding.Interfaces.BussinessLogic.Services;
 using CUAFunding.ViewModels;
 using CUAFunding.ViewModels.ProjectViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -43,7 +44,7 @@ namespace CUAFunding.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{id}")]
+        [HttpGet("{Id}")]
         public async Task<ShowProjectViewModel> GetProject(Guid id)
         {
             var result = await _service.ShowProject(id);
@@ -82,7 +83,7 @@ namespace CUAFunding.Controllers
             catch (MapperException ex)
             {
                 _logger.LogWarning($"Fail create project ErrorMessage: {ex.Message}");
-                return StatusCode(422, ex.Message);
+                return StatusCode(422, ex.Message + "\n" + ex.ValidationMessage);
             }
 
             _logger.LogInformation($"Successfull created  project with name: {viewModel.Title}");
@@ -106,5 +107,27 @@ namespace CUAFunding.Controllers
 
             return Ok();
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ChangeProjectImage(Guid id, IFormFile file)
+        {
+            try
+            {
+                await _service.ChangeProjectImage(id, file);
+            }
+            catch (UploadingException ex)
+            {
+                _logger.LogWarning("Fail update file with id: " + id + "Exception message: " + ex.Message);
+                return StatusCode(422, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Fail update file with id: " + id + "Exception message: " + ex.Message);
+                return StatusCode(500);
+            }
+
+            return Ok();
+        }
+        
     }
 }
