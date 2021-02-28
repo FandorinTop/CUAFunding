@@ -70,6 +70,7 @@ namespace CUAFunding.Common.Mappers
         {
             ShowProjectViewModel viewModel = new ShowProjectViewModel();
             viewModel = BaseMapper(project, viewModel) as ShowProjectViewModel;
+            viewModel.Id = project.Id;
             viewModel.PageVisitorsCount = project.PageVisitorsCount;
             viewModel.Сollected = collected;
             viewModel.AvgRating = rating;
@@ -97,11 +98,10 @@ namespace CUAFunding.Common.Mappers
             {
                 exception.AddValidationMistake(new KeyValuePair<string, string>($"{nameof(ProjectMapper)}", "Project ExpirationDate can`t be less now"));
             }
-            if (exception.GetValidationMistakeCount >= 1)
+            if (exception.ValidationMistakeCount >= 1)
             {
                 throw exception;
             }
-
         }
     }
 }

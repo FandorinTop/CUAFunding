@@ -63,7 +63,7 @@ namespace CUAFunding.Controllers
             catch (MapperException ex)
             {
                 _logger.LogWarning($"Fail project data update project with id: {viewModel.Id} ErrorMessage: {ex.Message}");
-                return StatusCode(422, ex.Message);
+                return StatusCode(422, ex.Message + "\n" + ex.ValidationMessage);
             }
 
             _logger.LogInformation($"Successfull information update project with id: {viewModel.Id}");

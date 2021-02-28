@@ -12,7 +12,7 @@ namespace CUAFunding.Common.Exceptions
             ExceptionsList.Add(pair);
         }
 
-        public string GetValidationNessage
+        public string ValidationMessage
         {
             get
             {
@@ -29,7 +29,7 @@ namespace CUAFunding.Common.Exceptions
             }
         }
 
-        public int GetValidationMistakeCount { get => ExceptionsList.Count;}
+        public int ValidationMistakeCount { get => ExceptionsList.Count;}
 
         public MapperException(string message) : base(message)
         {
