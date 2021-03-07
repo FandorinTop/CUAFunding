@@ -15,22 +15,36 @@ namespace CUAFunding.BusinessLogic.Providers
     {
         public async Task<string> LoadFilesAsync(string FolderPath, IFormFile file, IEnumerable<EnalableFileExtensionTypes> extention)
         {
-            var fileExtention = extention.ToString().Split(", ").Select(item => $".{item}").ToArray();
+            var fullFolderPath = Path.Combine(Directory.GetCurrentDirectory(), FolderPath);
+            var fileExtention = new List<string>();
+
+            foreach (var item in extention)
+            {
+                fileExtention.Add($".{item}");
+            }
 
             if (file.Length > 0)
             {
                 var fileExt = Path.GetExtension(file.FileName);
                 if (fileExtention.Contains(fileExt))
                 {
-                    var filePath = Path.GetTempFileName();
-                    filePath = File.Exists(filePath)
-                        ? filePath.Replace(Path.GetExtension(filePath), fileExt)
-                        : filePath.Replace(Path.GetExtension(filePath), "_UploadedTime:" + DateTime.Now.ToShortTimeString() + fileExt);
+                    Directory.CreateDirectory(FolderPath);
+                    var filePath = Path.GetRandomFileName();
+                    var fullPath = Path.Combine(fullFolderPath, filePath);
 
-                    var path = Path.Combine(FolderPath, filePath);
-                    await LoadFilesAsync(path, file, extention);
-               
-                    return path;
+                    fullPath = File.Exists(fullPath)
+                        ? fullPath.Replace(Path.GetExtension(fullPath), fileExt)
+                        : fullPath.Replace(Path.GetExtension(fullPath), "_UploadedTime_" + DateTime.Now.ToFileTimeUtc() + fileExt);
+
+                    var fileName = Path.GetFileName(fullPath);
+
+                    using (var stream = System.IO.File.Create(fullPath))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+
+                    return Path.Combine(FolderPath, fileName);
                 }
             }
             throw new UploadingException($"File size is less then 1");

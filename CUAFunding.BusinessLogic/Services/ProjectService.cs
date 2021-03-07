@@ -9,6 +9,7 @@ using CUAFunding.ViewModels;
 using CUAFunding.ViewModels.ProjectViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,16 +24,16 @@ namespace CUAFunding.BusinessLogic.Services
         private IProjectMapper _projectMapper;
         private IHttpContextAccessor _httpContextAccessor;
         private IFileServerProvider _fileServerProvider;
-        private IWebHostEnvironment _hostingEnvironment;
+        private IConfiguration _configuration;
 
 
-        public ProjectService(IProjectRepository projectRepository, IProjectMapper projectMapper, IHttpContextAccessor httpContextAccessor, IFileServerProvider fileServerProvider, IWebHostEnvironment hostingEnvironment)
+        public ProjectService(IProjectRepository projectRepository, IProjectMapper projectMapper, IHttpContextAccessor httpContextAccessor, IFileServerProvider fileServerProvider, IConfiguration configuration)
         {
             _projectRepository = projectRepository;
             _projectMapper = projectMapper;
             _httpContextAccessor = httpContextAccessor;
             _fileServerProvider = fileServerProvider;
-            _hostingEnvironment = hostingEnvironment;
+            _configuration = configuration;
         }
 
         public async Task<Guid> CreateProject(CreateProjectViewModel viewModel)
@@ -64,7 +65,12 @@ namespace CUAFunding.BusinessLogic.Services
             viewModel.OwnerId = new Guid(userId);
 
             var project = await _projectRepository.Find(viewModel.Id);
-            await CheckUserId(viewModel.Id, project);
+
+            var (isCorrectUser, message) = CheckUserId(viewModel.OwnerId, project);
+            if (!isCorrectUser)
+            {
+                throw new AuthorizationException(message);
+            }
 
             project = _projectMapper.Edit(project, viewModel);
             await _projectRepository.Update(project);
@@ -95,15 +101,15 @@ namespace CUAFunding.BusinessLogic.Services
             var project = await _projectRepository.Find(Id);
             var userId = new Guid(GetUserId());
 
-            await CheckUserId(userId, project);
-
-            if (project == null)
+            var (isCorrectUser, message)= CheckUserId(userId, project);
+            if (!isCorrectUser)
             {
-                throw new Exception();
+                throw new AuthorizationException(message);
             }
+
             if (file != null)
             {
-                path = await _fileServerProvider.LoadFilesAsync(Path.Combine(GetCurrentDirectory(), $"//{project.Title ?? "Unanamed"}//"), file, new List<EnalableFileExtensionTypes>() { EnalableFileExtensionTypes.jpg, EnalableFileExtensionTypes.jpeg, EnalableFileExtensionTypes.png });
+                path = await _fileServerProvider.LoadFilesAsync(Path.Combine(GetCurrentDirectory(), $"{project.Title ?? "Unanamed"}"), file, new List<EnalableFileExtensionTypes>() { EnalableFileExtensionTypes.jpg, EnalableFileExtensionTypes.jpeg, EnalableFileExtensionTypes.png });
             }
             if (!String.IsNullOrEmpty(project.ImagePath))
             {
@@ -114,20 +120,20 @@ namespace CUAFunding.BusinessLogic.Services
             await _projectRepository.Update(project);
         }
 
-        private Task CheckUserId(Guid Id, Project project)
+        private (bool, string) CheckUserId(Guid Id, Project project)
         {
             var userId = GetUserId();
 
             if (project == null)
             {
-                throw new Exception("No project with such id");
+                return (false, "No project with such id");
             }
             if (project.OwnerId.ToString() != userId)
             {
-                throw new Exception("User is not project owner");
+                return (false, "User is not project owner");
             }
 
-            return Task.CompletedTask;
+            return (true, string.Empty);
         }
 
         private string GetUserId()
@@ -137,7 +143,7 @@ namespace CUAFunding.BusinessLogic.Services
 
         private string GetCurrentDirectory()
         {
-            return _hostingEnvironment.ContentRootPath;
+            return _configuration["ProjectRoot:DirectoryRoot"];
         }
     }
 }

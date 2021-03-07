@@ -2,6 +2,7 @@
 using CUAFunding.DomainEntities.Entities;
 using CUAFunding.Interfaces.BussinessLogic.Services;
 using CUAFunding.ViewModels;
+using CUAFunding.ViewModels.FileUploadingViewModel;
 using CUAFunding.ViewModels.ProjectViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -108,26 +109,28 @@ namespace CUAFunding.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> ChangeProjectImage(Guid id, IFormFile file)
+        [HttpPost]
+        public async Task<IActionResult> ChangeProjectImage([FromForm] FileUploading viewModel)
         {
             try
             {
-                await _service.ChangeProjectImage(id, file);
+                await _service.ChangeProjectImage(viewModel.Id, viewModel.File);
             }
             catch (UploadingException ex)
             {
-                _logger.LogWarning("Fail update file with id: " + id + "Exception message: " + ex.Message);
+                _logger.LogWarning("Fail update file with id: " + viewModel.Id + "Exception message: " + ex.Message);
                 return StatusCode(422, ex.Message);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Fail update file with id: " + id + "Exception message: " + ex.Message);
+                _logger.LogError("Fail update file with id: " + viewModel.Id + "Exception message: " + ex.Message);
                 return StatusCode(500);
             }
 
+            _logger.LogInformation("Update file Image with id: " + viewModel.Id);
+
             return Ok();
         }
-        
+
     }
 }

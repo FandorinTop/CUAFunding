@@ -1,24 +1,21 @@
 using CUAFunding.Common.Extensions;
 using CUAFunding.Configurations;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using CUAFunding.Configurations;
-using System;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using IdentityServer4;
+using System;
+using System.IO;
 
 namespace CUAFunding
 {
-  
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -38,9 +35,6 @@ namespace CUAFunding
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, config =>
                 {
-                    //config.SignOutScheme = IdentityServerConstants.SignoutScheme;
-                    //config.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-
                     config.Authority = "https://localhost:8000";
                     config.ClientId = "CUAFunding_id_client";
                     config.ClientSecret = "CUAFunding_id_secret_client";
@@ -76,7 +70,10 @@ namespace CUAFunding
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, Configuration["ProjectRoot:DirectoryRoot"])), RequestPath= Configuration["ProjectRoot:RequestPath"]
+            });
             if (!env.IsDevelopment() || env.IsTesting())
             {
                 app.UseSpaStaticFiles();
