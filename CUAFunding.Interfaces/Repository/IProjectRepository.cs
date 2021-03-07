@@ -22,4 +22,3 @@ namespace CUAFunding.Interfaces.Repository
             string filterQuery);
     }
 }
-

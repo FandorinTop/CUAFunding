@@ -21,6 +21,7 @@ namespace CUAFunding.Common.Mappers
 
             return donation;
         }
+
         public Donation Edit(Donation donation,EditDonationViewModel viewModel)
         {
             donation.UserId = viewModel.UserId;
@@ -30,6 +31,7 @@ namespace CUAFunding.Common.Mappers
 
             return donation;
         }
+
         public EditDonationViewModel Edit(Donation donation)
         {
             EditDonationViewModel viewModel = new EditDonationViewModel();
@@ -43,6 +45,7 @@ namespace CUAFunding.Common.Mappers
 
             return viewModel;
         }
+
         public ShowDonationsViewModel Show(IEnumerable<Donation> donations)
         {
             ShowDonationsViewModel viewModel = new ShowDonationsViewModel();

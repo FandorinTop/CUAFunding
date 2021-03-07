@@ -18,6 +18,7 @@ namespace CUAFunding.Common.Mappers
 
             return mark;
         }
+
         public Mark Edit(Mark mark, EditMarkViewModel viewModel)
         {
             mark.UserId = viewModel.UserId;
@@ -26,6 +27,7 @@ namespace CUAFunding.Common.Mappers
 
             return mark;
         }
+
         public EditMarkViewModel Edit(Mark mark)
         {
             EditMarkViewModel viewModel = new EditMarkViewModel();
@@ -38,6 +40,7 @@ namespace CUAFunding.Common.Mappers
 
             return viewModel;
         }
+
         public ShowMarksViewModel Show (IEnumerable<Mark> marks)
         {
             ShowMarksViewModel viewModel = new ShowMarksViewModel();

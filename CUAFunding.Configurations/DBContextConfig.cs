@@ -24,6 +24,7 @@ namespace CUAFunding.Configurations
                 options.UseSqlServer(configuration.GetConnectionString("Testing"))
                 .UseLazyLoadingProxies());
         }
+
         public static void InitProjectTempData(this IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
@@ -38,6 +39,7 @@ namespace CUAFunding.Configurations
                 }
             }
         }
+
         private static IEnumerable<Project> InitProject(Guid OwnerId)
         {
             yield return new Project()

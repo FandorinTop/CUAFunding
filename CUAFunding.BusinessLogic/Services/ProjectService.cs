@@ -20,12 +20,13 @@ namespace CUAFunding.BusinessLogic.Services
 {
     public class ProjectService : IProjectService
     {
+        #region Fields
         private IProjectRepository _projectRepository;
         private IProjectMapper _projectMapper;
         private IHttpContextAccessor _httpContextAccessor;
         private IFileServerProvider _fileServerProvider;
         private IConfiguration _configuration;
-
+        #endregion
 
         public ProjectService(IProjectRepository projectRepository, IProjectMapper projectMapper, IHttpContextAccessor httpContextAccessor, IFileServerProvider fileServerProvider, IConfiguration configuration)
         {
@@ -54,7 +55,11 @@ namespace CUAFunding.BusinessLogic.Services
         public async Task DeleteProject(Guid Id)
         {
             var project = await _projectRepository.Find(Id);
-            var res = CheckUserId(Id, project);
+            var (isCorrectUser, message) = CheckUserId(Id, project);
+            if (!isCorrectUser)
+            {
+                throw new AuthorizationException(message);
+            }
 
             await _projectRepository.Delete(Id);
         }
@@ -63,7 +68,6 @@ namespace CUAFunding.BusinessLogic.Services
         {
             var userId = GetUserId();
             viewModel.OwnerId = new Guid(userId);
-
             var project = await _projectRepository.Find(viewModel.Id);
 
             var (isCorrectUser, message) = CheckUserId(viewModel.OwnerId, project);

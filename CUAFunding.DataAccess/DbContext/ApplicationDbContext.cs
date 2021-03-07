@@ -30,5 +30,4 @@ namespace CUAFunding.DataAccess
             base.OnModelCreating(modelBuilder);
         }
     }
-   
 }

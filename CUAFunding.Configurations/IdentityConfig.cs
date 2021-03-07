@@ -66,5 +66,4 @@ namespace CUAFunding.Configurations
             await userManager.AddToRoleAsync(applicationUser, "Admin");
         }
     }
-    
 }

@@ -13,12 +13,12 @@ namespace CUAFunding.BusinessLogic.Providers
 {
     public class FileServerProvider : IFileServerProvider
     {
-        public async Task<string> LoadFilesAsync(string FolderPath, IFormFile file, IEnumerable<EnalableFileExtensionTypes> extention)
+        public async Task<string> LoadFilesAsync(string FolderPath, IFormFile file, IEnumerable<EnalableFileExtensionTypes> extentions)
         {
             var fullFolderPath = Path.Combine(Directory.GetCurrentDirectory(), FolderPath);
             var fileExtention = new List<string>();
 
-            foreach (var item in extention)
+            foreach (var item in extentions)
             {
                 fileExtention.Add($".{item}");
             }
@@ -43,12 +43,12 @@ namespace CUAFunding.BusinessLogic.Providers
                         await file.CopyToAsync(stream);
                     }
 
-
                     return Path.Combine(FolderPath, fileName);
                 }
             }
             throw new UploadingException($"File size is less then 1");
         }
+
         public async Task DeleteFileAsync(string path)
         {
             var filePath = System.IO.File.Exists(path);

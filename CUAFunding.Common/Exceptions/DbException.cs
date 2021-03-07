@@ -14,5 +14,4 @@ namespace CUAFunding.Common.Exceptions
         {
         }
     }
-
 }

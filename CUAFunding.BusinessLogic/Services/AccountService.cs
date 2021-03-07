@@ -39,8 +39,6 @@ namespace CUAFunding.BusinessLogic.Services
             }
 
             var claims = externalUser.Claims.ToList();
-
-  
             var userIdClaim = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Subject);
             if (userIdClaim == null)
             {
@@ -66,6 +64,7 @@ namespace CUAFunding.BusinessLogic.Services
                 await RegisterExternal(name.Value, email.Value, new UserLoginInfo(externalProvider, externalUserId, externalProvider));
             }
         }
+
         public async Task RegisterExternal(string userName, string email, UserLoginInfo info)
         {
 
@@ -79,7 +78,6 @@ namespace CUAFunding.BusinessLogic.Services
             var result = await _userManager.CreateAsync(user);
             if (result.Succeeded)
             {
-                    
                     var identityResult = await _userManager.AddLoginAsync(user, info);
                     if (identityResult.Succeeded)
                     {
@@ -89,7 +87,6 @@ namespace CUAFunding.BusinessLogic.Services
             else
             {
                 throw new AuthorizationException("Can`t create ApplicationUser");
-
             }
         }
 
@@ -111,7 +108,6 @@ namespace CUAFunding.BusinessLogic.Services
         public async Task RegistrationUser(RegisterAccountView viewModel)
         {
             var user = new ApplicationUser();
-            //ToDo Mapper 
             user.UserName = viewModel.Email;
             user.Email = viewModel.Email;
 
@@ -119,11 +115,9 @@ namespace CUAFunding.BusinessLogic.Services
             if (!result.Succeeded)
             {
                 throw new AuthorizationException("Registration error", (IEnumerable<Exception>)result.Errors);
-
             }
             var registredUser = await _userManager.FindByNameAsync(viewModel.Email);
 
-            //ToDo addRole
             await _userManager.AddToRoleAsync(registredUser, "");
         }
 
@@ -134,8 +128,8 @@ namespace CUAFunding.BusinessLogic.Services
             {
                 throw new AuthorizationException("User is not found");
             }
-            var result = await _signInManager.PasswordSignInAsync(user, viewModel.Password, isPersistent: true, lockoutOnFailure: false);
 
+            var result = await _signInManager.PasswordSignInAsync(user, viewModel.Password, isPersistent: true, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
                 throw new AuthorizationException("Wrong password");

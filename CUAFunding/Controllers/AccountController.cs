@@ -16,5 +16,10 @@ namespace CUAFunding.Controllers
         {
             return SignOut(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
         }
+
+        public IActionResult Login()
+        {
+            return Redirect("https://localhost:5001/");
+        }
     }
 }
