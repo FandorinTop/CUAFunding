@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityModel" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CUAFunding.Common\CUAFunding.Common.csproj" />
+    <ProjectReference Include="..\CUAFunding.DomainEntities\CUAFunding.DomainEntities.csproj" />
+    <ProjectReference Include="..\CUAFunding.Interfaces\CUAFunding.Interfaces.csproj" />
+    <ProjectReference Include="..\CUAFunding.ViewModels\CUAFunding.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
