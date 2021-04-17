@@ -83,13 +83,13 @@ namespace CUAFunding.DataAccess.Repository
             return isValid;
         }
 
-        public async Task<decimal> GetCollected(Guid id)
+        public async Task<decimal> GetCollected(string id)
         {
             var res = await _context.Donations.Where(item => item.ProjectId == id).SumAsync(item => item.Value);
 
             return res;
         }
-        public async Task<double> GetRanting(Guid id)
+        public async Task<double> GetRanting(string id)
         {
             var res = await _context.Marks.Where(item => item.ProjectId == id).SumAsync(item => item.Value);
 

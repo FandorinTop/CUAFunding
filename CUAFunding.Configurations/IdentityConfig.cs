@@ -14,7 +14,6 @@ namespace CUAFunding.Configurations
     {
         public static void InjectIdentity(this IServiceCollection services, IConfiguration configuration)
         {
-            
             services.AddIdentity<ApplicationUser, ApplicationRole>(config =>
             {
                 config.Password.RequireDigit = false;

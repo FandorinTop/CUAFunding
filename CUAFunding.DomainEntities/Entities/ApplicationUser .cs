@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CUAFunding.DomainEntities.Entities
 {
-    public class ApplicationUser : IdentityUser<Guid>
+    public class ApplicationUser : IdentityUser<string>
     {
         public virtual IEnumerable<Project> CreatedProjects { get; set; }
         public virtual IEnumerable<Donation> Donations { get; set; }

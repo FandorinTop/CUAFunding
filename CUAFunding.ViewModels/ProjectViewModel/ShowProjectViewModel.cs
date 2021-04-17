@@ -11,7 +11,7 @@ namespace CUAFunding.ViewModels.ProjectViewModel
     public class ShowProjectViewModel : BaseProjectViewModel, IBaseEditViewModel
     {
         public IEnumerable<DonationViewItem> Donations;
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public decimal? Сollected { get; set; }
         public int PageVisitorsCount { get; set; }
         public double? AvgRating { get; set; }

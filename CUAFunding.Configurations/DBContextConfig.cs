@@ -23,6 +23,24 @@ namespace CUAFunding.Configurations
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("Testing"))
                 .UseLazyLoadingProxies());
+
+            //TODO remove this
+            services.AddIdentity<ApplicationUser, ApplicationRole>(config =>
+            {
+                config.Password.RequireDigit = false;
+                config.Password.RequireLowercase = false;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireUppercase = false;
+                config.Password.RequiredLength = 6;
+            })
+              .AddEntityFrameworkStores<ApplicationDbContext>()
+              .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(option =>
+            {
+                option.LoginPath = "/Account/Login";
+                option.LoginPath = "/Account/AccessDenied";
+            });
         }
 
         public static void InitProjectTempData(this IApplicationBuilder app)
@@ -40,7 +58,7 @@ namespace CUAFunding.Configurations
             }
         }
 
-        private static IEnumerable<Project> InitProject(Guid OwnerId)
+        private static IEnumerable<Project> InitProject(string OwnerId)
         {
             yield return new Project()
             {

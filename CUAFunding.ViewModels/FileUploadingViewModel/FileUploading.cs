@@ -7,7 +7,7 @@ namespace CUAFunding.ViewModels.FileUploadingViewModel
 {
     public class FileUploading
     {
-        public Guid Id { get; set;} 
+        public string Id { get; set;} 
         public IFormFile File { get; set; }
     }
 }

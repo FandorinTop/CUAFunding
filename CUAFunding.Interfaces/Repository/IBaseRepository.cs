@@ -8,8 +8,8 @@ namespace CUAFunding.Interfaces.Repository
     public interface IBaseRepository<TEntity> where TEntity : class
     {
         Task Delete(TEntity entity);
-        Task Delete(Guid id);
-        Task<TEntity> Find(Guid id);
+        Task Delete(string id);
+        Task<TEntity> Find(string id);
         Task Insert(TEntity entity);
         Task Update(TEntity entity);
     }

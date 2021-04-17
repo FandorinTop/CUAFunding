@@ -6,6 +6,6 @@ namespace CUAFunding.ViewModels.BaseViewModel.Intefaces
 {
     public interface IBaseEditViewModel
     {
-        Guid Id { get; set; }
+        string Id { get; set; }
     }
 }

@@ -36,6 +36,10 @@ namespace CUAFunding.Configurations
             service.AddTransient<IMarkRepository, MarkRepository>();
             #endregion
 
+            service.AddTransient<RoleManager<ApplicationRole>>();
+            service.AddTransient<SignInManager<ApplicationUser>>();
+            service.AddTransient<UserManager<ApplicationUser>>();
+
             #region Services
             service.AddTransient<IAccountService, AccountService>();
             service.AddTransient<IProjectService, ProjectService>();

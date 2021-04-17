@@ -37,10 +37,10 @@ namespace CUAFunding.BusinessLogic.Services
             _configuration = configuration;
         }
 
-        public async Task<Guid> CreateProject(CreateProjectViewModel viewModel)
+        public async Task<string> CreateProject(CreateProjectViewModel viewModel)
         {
             var userId = GetUserId();
-            viewModel.OwnerId = new Guid(userId);
+            viewModel.OwnerId = userId;
             if (String.IsNullOrEmpty(userId))
             {
                 throw new AuthorizationException("User is not authorize");
@@ -52,7 +52,7 @@ namespace CUAFunding.BusinessLogic.Services
             return project.Id;
         }
 
-        public async Task DeleteProject(Guid Id)
+        public async Task DeleteProject(string Id)
         {
             var project = await _projectRepository.Find(Id);
             var (isCorrectUser, message) = CheckUserId(Id, project);
@@ -67,7 +67,7 @@ namespace CUAFunding.BusinessLogic.Services
         public async Task EditProject(EditProjectViewModel viewModel)
         {
             var userId = GetUserId();
-            viewModel.OwnerId = new Guid(userId);
+            viewModel.OwnerId = userId;
             var project = await _projectRepository.Find(viewModel.Id);
 
             var (isCorrectUser, message) = CheckUserId(viewModel.OwnerId, project);
@@ -80,7 +80,7 @@ namespace CUAFunding.BusinessLogic.Services
             await _projectRepository.Update(project);
         }
 
-        public async Task<ShowProjectViewModel> ShowProject(Guid Id)
+        public async Task<ShowProjectViewModel> ShowProject(string Id)
         {
             var project = await _projectRepository.Find(Id);
             var collected = await _projectRepository.GetCollected(Id);
@@ -99,11 +99,11 @@ namespace CUAFunding.BusinessLogic.Services
             return result;
         }
 
-        public async Task ChangeProjectImage(Guid Id, IFormFile file)
+        public async Task ChangeProjectImage(string Id, IFormFile file)
         {
             var path = string.Empty;
             var project = await _projectRepository.Find(Id);
-            var userId = new Guid(GetUserId());
+            var userId = GetUserId();
 
             var (isCorrectUser, message)= CheckUserId(userId, project);
             if (!isCorrectUser)
@@ -124,7 +124,7 @@ namespace CUAFunding.BusinessLogic.Services
             await _projectRepository.Update(project);
         }
 
-        private (bool, string) CheckUserId(Guid Id, Project project)
+        private (bool, string) CheckUserId(string Id, Project project)
         {
             var userId = GetUserId();
 

@@ -6,8 +6,8 @@ namespace CUAFunding.ViewModels.BaseViewModel
 {
     public class BaseMarkViewModel
     {
-        public Guid? UserId { get; set; }
-        public Guid ProjectId { get; set; }
+        public string UserId { get; set; }
+        public string ProjectId { get; set; }
         public int Value { get; set; }
     }
 }

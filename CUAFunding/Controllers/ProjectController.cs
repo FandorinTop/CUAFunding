@@ -46,7 +46,7 @@ namespace CUAFunding.Controllers
 
         [AllowAnonymous]
         [HttpGet("{Id}")]
-        public async Task<ShowProjectViewModel> GetProject(Guid id)
+        public async Task<ShowProjectViewModel> GetProject(string id)
         {
             var result = await _service.ShowProject(id);
 
@@ -76,7 +76,7 @@ namespace CUAFunding.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectViewModel viewModel)
         {
-            Guid projId;
+            string projId;
             try
             {
                 projId = await _service.CreateProject(viewModel);
@@ -93,7 +93,7 @@ namespace CUAFunding.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProject(Guid id)
+        public async Task<IActionResult> DeleteProject(string id)
         {
             try
             {

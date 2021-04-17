@@ -8,7 +8,7 @@ namespace CUAFunding.ViewModels.ProjectViewModel
 {
     public class EditProjectViewModel : BaseProjectViewModel, IBaseEditViewModel
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public int PageVisitorsCount { get; set; }
     }
 }

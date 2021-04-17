@@ -10,9 +10,10 @@ namespace CUAFunding.DomainEntities.Entities.Base
         public BaseEntity()
         {
             CreationDate = DateTime.UtcNow;
+            Id = Guid.NewGuid().ToString();
         }
         [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

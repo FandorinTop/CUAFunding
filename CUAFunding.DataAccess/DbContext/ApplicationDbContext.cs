@@ -10,7 +10,7 @@ using System.Text;
 
 namespace CUAFunding.DataAccess
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         #region DbSets
         public virtual DbSet<Project> Projects { get; set; }
@@ -26,7 +26,6 @@ namespace CUAFunding.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
             base.OnModelCreating(modelBuilder);
         }
     }

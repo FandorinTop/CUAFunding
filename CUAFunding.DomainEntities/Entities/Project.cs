@@ -9,7 +9,7 @@ namespace CUAFunding.DomainEntities.Entities
     public class Project : BaseEntity
     {
         [Required]
-        public Guid OwnerId { get; set; }
+        public string OwnerId { get; set; }
         [ForeignKey(nameof(OwnerId))]
         public virtual ApplicationUser Owner { get; set; }
         [MaxLength(30)]

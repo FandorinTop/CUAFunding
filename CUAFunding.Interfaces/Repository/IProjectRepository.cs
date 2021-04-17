@@ -10,8 +10,8 @@ namespace CUAFunding.Interfaces.Repository
 {
     public interface IProjectRepository : IBaseRepository<Project>
     {
-        Task<double> GetRanting(Guid Id);
-        Task<decimal> GetCollected(Guid Id);
+        Task<double> GetRanting(string Id);
+        Task<decimal> GetCollected(string Id);
 
         Task<ApiResult<ShowProjectViewModel>> GetApiResult(
             int pageIndex,

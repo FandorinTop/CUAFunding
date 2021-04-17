@@ -30,13 +30,13 @@ namespace CUAFunding.DataAccess.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(string id)
         {
             var entity = await _dbSet.FindAsync(id);
             await Delete(entity);
         }
 
-        public async Task<TEntity> Find(Guid id)
+        public async Task<TEntity> Find(string id)
         {
             var entity = await _dbSet.FindAsync(id);
             return entity;
