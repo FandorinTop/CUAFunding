@@ -1,4 +1,5 @@
 ﻿using CUAFunding.DomainEntities.Entities.Base;
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,6 +24,8 @@ namespace CUAFunding.DomainEntities.Entities
         public int PageVisitorsCount { get; set; }
         public string ImagePath { get; set; }
         public DateTime ExpirationDate { get; set; }
+        public Point Location { get; set; }
+
         public virtual IEnumerable<Donation> Donations { get; set; }
         public virtual IEnumerable<Mark> Marks { get; set; }
         public Project() : base()

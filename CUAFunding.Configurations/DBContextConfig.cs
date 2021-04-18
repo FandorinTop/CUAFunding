@@ -13,6 +13,7 @@ using CUAFunding.Interfaces.BussinessLogic.Services;
 using Microsoft.AspNetCore.Builder;
 using CUAFunding.BusinessLogic.Services;
 using CUAFunding.Interfaces.Repository;
+using NetTopologySuite;
 
 namespace CUAFunding.Configurations
 {
@@ -21,7 +22,8 @@ namespace CUAFunding.Configurations
         public static void InjectDataBase(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("Testing"))
+                options.UseSqlServer(configuration.GetConnectionString("Testing"),
+                x => x.UseNetTopologySuite())
                 .UseLazyLoadingProxies());
 
             //TODO remove this
