@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using CUAFunding.DomainEntities.Entities.Base;
 using Microsoft.AspNetCore.Identity;
 
 namespace CUAFunding.DomainEntities.Entities
 {
     public class ApplicationUser : IdentityUser<string>
     {
-        public virtual IEnumerable<Project> CreatedProjects { get; set; }
-        public virtual IEnumerable<Donation> Donations { get; set; }
-        public virtual IEnumerable<Mark> Marks { get; set; }
+        public virtual List<Project> CreatedProjects { get; set; } = new List<Project>();
+        public virtual List<Donation> Donations { get; set; } = new List<Donation>();
+        public virtual List<Mark> Marks { get; set; } = new List<Mark>();
+        public virtual List<ChatUser> Chats { get; set; } = new List<ChatUser>();
+
         public ApplicationUser()
         {
-            CreatedProjects = new List<Project>();
-            Donations = new List<Donation>();
-            Marks = new List<Mark>();
         }
     }
 }
