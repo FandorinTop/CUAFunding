@@ -15,6 +15,6 @@ namespace CUAFunding.DomainEntities.Entities
         [MaxLength(2000)]
         public string Value { get; set; }
 
-        public DateTime SendingTyme { get; set; }
+        public DateTime SendingTime { get; set; }
     }
 }

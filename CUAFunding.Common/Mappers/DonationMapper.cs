@@ -11,7 +11,7 @@ namespace CUAFunding.Common.Mappers
 {
     public class DonationMapper : IDonationMapper
     {
-        public Donation Create(CreateDonationViewModel viewModel)
+        public Donation Create(AddDonationViewModel viewModel)
         {
             Donation donation = new Donation();
             donation.UserId = viewModel.UserId;

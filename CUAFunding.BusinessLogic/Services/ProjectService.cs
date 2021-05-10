@@ -1,4 +1,5 @@
 ﻿using CUAFunding.Common.Exceptions;
+using CUAFunding.DataAccess;
 using CUAFunding.DomainEntities.Entities;
 using CUAFunding.DomainEntities.Enums;
 using CUAFunding.Interfaces.BussinessLogic.Providers;
@@ -6,13 +7,17 @@ using CUAFunding.Interfaces.BussinessLogic.Services;
 using CUAFunding.Interfaces.Mappers;
 using CUAFunding.Interfaces.Repository;
 using CUAFunding.ViewModels;
+using CUAFunding.ViewModels.DonationViewModel;
+using CUAFunding.ViewModels.MarkViewModel;
 using CUAFunding.ViewModels.ProjectViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -148,6 +153,77 @@ namespace CUAFunding.BusinessLogic.Services
         private string GetCurrentDirectory()
         {
             return _configuration["ProjectRoot:DirectoryRoot"];
+        }
+    }
+
+    public class DonationService
+    {
+        private readonly ApplicationDbContext _context;
+
+        public async Task<bool> AddDonation(AddDonationViewModel viewModel)
+        {
+            var project = await _context.Projects.FindAsync(viewModel.ProjectId);
+
+            var user = await _context.ApplicationUsers.FindAsync(viewModel.UserId);
+
+            var donation = new Donation()
+            {
+                Message = viewModel.Message,
+                Project = project,
+                User = user,
+                Value = viewModel.Value
+            };
+
+            await _context.Donations.AddAsync(donation);
+            var result = await _context.SaveChangesAsync();
+
+            return result >= 0 ? true : false;
+        }
+    }
+
+    public class MarkService
+    {
+        private readonly ApplicationDbContext _context;
+
+        private async Task<bool> AddMark(CreateMarkViewModel viewModel)
+        {
+            var project = await _context.Projects.FindAsync(viewModel.ProjectId);
+            var user = await _context.ApplicationUsers.FindAsync(viewModel.UserId);
+
+            var mark = new Mark()
+            {
+                Project = project,
+                User = user,
+                Value = viewModel.Value
+            };
+
+            await _context.Marks.AddAsync(mark);
+            var result = await _context.SaveChangesAsync();
+
+            return result >= 0 ? true : false;
+        }
+
+        public async Task<bool> UpdateMark(EditMarkViewModel viewModel)
+        {
+            var mark = await _context.Marks
+                .FirstOrDefaultAsync(item => item.ProjectId == viewModel.ProjectId && item.UserId == viewModel.UserId);
+
+            if(mark != null)
+            {
+                mark.Value = viewModel.Value;
+                var result = await _context.SaveChangesAsync();
+
+                return true;
+            }
+            else
+            {
+                return await AddMark(new CreateMarkViewModel()
+                {
+                    ProjectId = viewModel.ProjectId,
+                    UserId = viewModel.UserId,
+                    Value = viewModel.Value
+                });
+            }
         }
     }
 }
