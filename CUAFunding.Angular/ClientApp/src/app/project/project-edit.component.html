@@ -1,0 +1,151 @@
+<div class="project-edit">
+    <h1>{{title}}</h1>
+
+    <p *ngIf="this.id && !project"><em>Loading...</em></p>
+
+    <div class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Project title:</label>
+        <br />
+        <input type="text" id="title"
+               formControlName="title" required
+               placeholder="Project title..."
+               class="form-control" />
+
+        <div *ngIf="form.get('title').invalid &&
+                 (form.get('title').dirty || form.get('title').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('title').errors?.required">
+            Name is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="iso2">Lon</label>
+        <br />
+        <input type="text" id="locationX"
+               formControlName="locationX" required
+               placeholder="Lon..."
+               class="form-control" />
+
+        <div *ngIf="form.get('locationX').invalid &&
+                 (form.get('locationX').dirty || form.get('locationX').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('locationX').errors?.required">
+            ISO 3166-1 ALPHA-2 country code is required.
+          </div>
+          <div *ngIf="form.get('locationX').errors?.pattern">
+            ISO 3166-1 ALPHA-2 country code requires 2 letters.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="locationY">ISO 3166-1 ALPHA-3 Country Code (3 letters)</label>
+        <br />
+        <input type="text" id="locationY"
+               formControlName="locationY" required
+               placeholder="3 letters country code..."
+               class="form-control" />
+
+        <div *ngIf="form.get('locationY').invalid &&
+                 (form.get('locationY').dirty || form.get('locationY').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('locationY').errors?.required">
+            ISO 3166-1 ALPHA-3 country code is required.
+          </div>
+          <div *ngIf="form.get('locationY').errors?.pattern">
+            ISO 3166-1 ALPHA-3 country code requires 3 letters.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="goal">goal</label>
+        <br />
+        <input type="text" id="goal"
+               formControlName="goal" required
+               placeholder="goal..."
+               class="form-control" />
+
+        <div *ngIf="form.get('goal').invalid &&
+                 (form.get('goal').dirty || form.get('goal').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('goal').errors?.pattern">
+            pattern
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="expirationDate">expirationDate</label>
+        <br />
+        <input type="date" id="expirationDate"
+               formControlName="expirationDate" required
+               placeholder="expirationDate..."
+               class="form-control" />
+
+        <div *ngIf="form.get('expirationDate').invalid &&
+                 (form.get('expirationDate').dirty || form.get('expirationDate').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('locationY').errors?.required">
+            ISO 3166-1 ALPHA-3 country code is required.
+          </div>
+          <div *ngIf="form.get('expirationDate').errors?.pattern">
+            pattern
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group commands">
+        <button *ngIf="id" type="submit"
+                (click)="onSubmit()"
+                [disabled]="form.invalid"
+                class="btn btn-success">
+          Save
+        </button>
+        <button *ngIf="!id" type="submit"
+                (click)="onSubmit()"
+                [disabled]="form.invalid"
+                class="btn btn-success">
+          Create
+        </button>
+        <button type="button"
+                [routerLink]="['/cities']"
+                class="btn">
+          Cancel
+        </button>
+      </div>
+      </div>
+</div>
+
+<!-- Form debug info panel -->
+<div class="card bg-light mb-3">
+  <div class="card-header">Form Debug Info</div>
+  <div class="card-body">
+    <div class="card-text">
+      <div><strong>Form value:</strong></div>
+      <div class="help-block">
+          {{ form.value | json }}
+      </div>
+      <div class="mt-2"><strong>Form status:</strong></div>
+      <div class="help-block">
+          {{ form.status | json }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Form activity log panel -->
+<div class="card bg-light mb-3">
+  <div class="card-header">Form Activity Log</div>
+  <div class="card-body">
+    <div class="card-text">
+      <div class="help-block">
+        <span *ngIf="activityLog" 
+            [innerHTML]="activityLog"></span>
+      </div>
+    </div>
+  </div>
+</div>

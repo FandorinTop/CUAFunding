@@ -14,7 +14,7 @@ import { ApiResult } from '../base.service';
   styleUrls: ['./project.component.css']
 })
 export class ProjectComponent {
-  public displayedColumns: string[] = ['id', 'title', 'description', 'locationX', 'locationY', 'goal', 'expirationDate'];
+  public displayedColumns: string[] = ['id', 'title', 'locationX', 'locationY', 'goal', 'expirationDate'];
   public projects: MatTableDataSource<Project>;
 
   defaultPageIndex: number = 0;

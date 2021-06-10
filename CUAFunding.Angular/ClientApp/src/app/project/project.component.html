@@ -4,7 +4,7 @@
 
 <div class="commands text-right" *ngIf="projects">
   <button type="button"
-          [routerLink]="['/projects']"
+          [routerLink]="['/admin/project']"
           class="btn btn-success">
       Add a new Projects
   </button>
@@ -15,21 +15,23 @@
         placeholder="Filter by name (or part of it)...">
 </mat-form-field>
 
-<table mat-table [dataSource]="cities" class="mat-elevation-z8" [hidden]="!cities"
+<table mat-table [dataSource]="projects" class="mat-elevation-z8" [hidden]="!projects"
     matSort (matSortChange)="loadData()"
     matSortActive="{{defaultSortColumn}}" matSortDirection="{{defaultSortOrder}}">
 
   <!-- Id Column -->
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-    <td mat-cell *matCellDef="let project"> {{project.id}} </td>
+    <td mat-cell *matCellDef="let project">
+      <a [routerLink]="['/admin/project', project.id]">{{project.id}}</a>
+    </td>
   </ng-container>
 
   <!-- Name Column -->
   <ng-container matColumnDef="title">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
     <td mat-cell *matCellDef="let project">
-      <a [routerLink]="['/project', project.id]">{{project.title}}</a>
+      {{project.title}}
     </td>
   </ng-container>
 
@@ -50,23 +52,18 @@
     <td mat-cell *matCellDef="let project"> {{project.goal}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="goal">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>goal</th>
-    <td mat-cell *matCellDef="let project"> {{project.goal}} </td>
-  </ng-container>
-
   <ng-container matColumnDef="expirationDate">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>expirationDate</th>
     <td mat-cell *matCellDef="let project"> {{project.expirationDate}} </td>
   </ng-container>
 
   <!-- CountryName Column -->
-  <ng-container matColumnDef="countryName">
+  <!--<ng-container matColumnDef="countryName">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Country</th>
     <td mat-cell *matCellDef="let project">
       <a [routerLink]="['/country', project.countryId]">{{project.countryName}}</a>
     </td>
-  </ng-container>
+  </ng-container>-->
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
