@@ -3,8 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CUAFunding.DomainEntities.Entities
 {
-    public class ImagePath : BaseEntity
+    public class FilePath : BaseEntity
     {
+        public string FileName { get; set; }
+
+        public string FileDestination { get; set; }
+
         public string Path { get; set; }
 
         [ForeignKey(nameof(Project))]

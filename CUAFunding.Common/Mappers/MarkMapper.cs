@@ -35,8 +35,8 @@ namespace CUAFunding.Common.Mappers
             viewModel.UserId = mark.UserId;
             viewModel.ProjectId = mark.ProjectId;
             viewModel.Value = mark.Value;
-            viewModel.ProjectName = mark.Project.Title;
-            viewModel.UserName = mark.User.UserName;
+            //viewModel.ProjectName = mark.Project.Title;
+            //viewModel.UserName = mark.User.UserName;
 
             return viewModel;
         }

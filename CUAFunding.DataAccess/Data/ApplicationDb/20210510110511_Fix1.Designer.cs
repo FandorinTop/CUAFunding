@@ -4,15 +4,17 @@ using CUAFunding.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
 namespace CUAFunding.DataAccess.Data.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210510110511_Fix1")]
+    partial class Fix1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,60 +221,6 @@ namespace CUAFunding.DataAccess.Data.ApplicationDb
                     b.ToTable("Equipment");
                 });
 
-            modelBuilder.Entity("CUAFunding.DomainEntities.Entities.FilePath", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FileDestination")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastEditDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Path")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("FilePath");
-                });
-
-            modelBuilder.Entity("CUAFunding.DomainEntities.Entities.ImagePath", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastEditDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Path")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ImagePath");
-                });
-
             modelBuilder.Entity("CUAFunding.DomainEntities.Entities.Mark", b =>
                 {
                     b.Property<string>("Id")
@@ -349,14 +297,14 @@ namespace CUAFunding.DataAccess.Data.ApplicationDb
                     b.Property<decimal>("Goal")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Point>("Location")
                         .HasColumnType("geography");
-
-                    b.Property<string>("MainImagePath")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
@@ -547,24 +495,6 @@ namespace CUAFunding.DataAccess.Data.ApplicationDb
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CUAFunding.DomainEntities.Entities.FilePath", b =>
-                {
-                    b.HasOne("CUAFunding.DomainEntities.Entities.Project", "Project")
-                        .WithMany("ConectedFiles")
-                        .HasForeignKey("ProjectId");
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("CUAFunding.DomainEntities.Entities.ImagePath", b =>
-                {
-                    b.HasOne("CUAFunding.DomainEntities.Entities.Project", "Project")
-                        .WithMany("ConectedImages")
-                        .HasForeignKey("ProjectId");
-
-                    b.Navigation("Project");
-                });
-
             modelBuilder.Entity("CUAFunding.DomainEntities.Entities.Mark", b =>
                 {
                     b.HasOne("CUAFunding.DomainEntities.Entities.Project", "Project")
@@ -691,10 +621,6 @@ namespace CUAFunding.DataAccess.Data.ApplicationDb
 
             modelBuilder.Entity("CUAFunding.DomainEntities.Entities.Project", b =>
                 {
-                    b.Navigation("ConectedFiles");
-
-                    b.Navigation("ConectedImages");
-
                     b.Navigation("Donations");
 
                     b.Navigation("Marks");

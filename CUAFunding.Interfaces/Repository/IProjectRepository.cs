@@ -20,5 +20,14 @@ namespace CUAFunding.Interfaces.Repository
             string sortOrder,
             string filterColumn,
             string filterQuery);
+
+        Task<ApiResult<ShowProjectViewModel>> GetApiResult(
+            int pageIndex,
+            int pageSize,
+            string sortColumn = null,
+            string sortOrder = null,
+            string filterColumn = null,
+            string filterQuery = null,
+            string userId = null);
     }
 }

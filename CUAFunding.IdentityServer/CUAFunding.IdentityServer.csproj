@@ -15,6 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.0" />
     <ProjectReference Include="..\CUAFunding.BusinessLogic\CUAFunding.BusinessLogic.csproj" />
     <ProjectReference Include="..\CUAFunding.Configurations\CUAFunding.Configurations.csproj" />
     <ProjectReference Include="..\CUAFunding.ViewModels\CUAFunding.ViewModels.csproj" />

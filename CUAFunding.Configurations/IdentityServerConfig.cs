@@ -17,6 +17,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NetTopologySuite;
+
 
 namespace CUAFunding.IdentityServer
 {
@@ -100,7 +102,8 @@ namespace CUAFunding.IdentityServer
             var migrationsAssembly = "CUAFunding.DataAccess";
             
             services.AddDbContext<ApplicationDbContext>(options =>
-                           options.UseSqlServer(connectionString));
+                           options.UseSqlServer(connectionString,
+                           x=> x.UseNetTopologySuite()));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(config =>
             {
@@ -157,7 +160,7 @@ namespace CUAFunding.IdentityServer
 
                 if (!roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
                 {
-                    var roleResult = roleManager.CreateAsync(new ApplicationRole("Admin")).GetAwaiter().GetResult();
+                    var roleResult = roleManager.CreateAsync(new ApplicationRole("Admin") { Id = Guid.NewGuid().ToString() }).GetAwaiter().GetResult();
                 }
                 if (amin==null)
                 {

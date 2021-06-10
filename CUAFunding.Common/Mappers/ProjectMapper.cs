@@ -5,6 +5,7 @@ using CUAFunding.Interfaces.Mappers;
 using System.Collections.Generic;
 using System;
 using CUAFunding.Common.Exceptions;
+using NetTopologySuite.Geometries;
 
 namespace CUAFunding.Common.Mappers
 {
@@ -16,7 +17,6 @@ namespace CUAFunding.Common.Mappers
             viewModel.Title = project.Title;
             viewModel.Description = project.Description;
             viewModel.Goal = project.Goal;
-            viewModel.ImagePath = project.ImagePath;
             viewModel.ExpirationDate = project.ExpirationDate;
 
             return viewModel;
@@ -30,8 +30,8 @@ namespace CUAFunding.Common.Mappers
             project.Title = viewModel.Title;
             project.Description = viewModel.Description;
             project.Goal = viewModel.Goal;
-            project.ImagePath = viewModel.ImagePath;
             project.ExpirationDate = viewModel.ExpirationDate;
+            project.Location = new Point(viewModel.LocationX ?? 0, viewModel.LocationY ?? 0) { SRID = 4326 };
 
             return project;
         }
@@ -59,7 +59,6 @@ namespace CUAFunding.Common.Mappers
             project.Title = viewModel.Title;
             project.Description = viewModel.Description;
             project.Goal = viewModel.Goal;
-            project.ImagePath = viewModel.ImagePath;
             project.ExpirationDate = viewModel.ExpirationDate;
             ProjectValidation(project, nameof(Edit));
 
@@ -85,10 +84,6 @@ namespace CUAFunding.Common.Mappers
             if (String.IsNullOrWhiteSpace(project.Title))
             {
                 exception.AddValidationMistake(new KeyValuePair<string, string>($"{nameof(project.Title)}", "Project Title can`t be Void Or WhiteSpace"));
-            }
-            if (String.IsNullOrWhiteSpace(project.Description))
-            {
-                exception.AddValidationMistake(new KeyValuePair<string, string>($"{nameof(project.Description)}", "Project Description can`t be Void Or WhiteSpace"));
             }
             if (project.Goal < 0)
             {

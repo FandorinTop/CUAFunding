@@ -14,6 +14,7 @@ namespace CUAFunding.DomainEntities.Entities
 
         public ApplicationUser()
         {
+            Id = Guid.NewGuid().ToString();
         }
     }
 }

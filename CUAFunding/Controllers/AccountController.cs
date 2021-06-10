@@ -10,13 +10,16 @@ using System.Threading.Tasks;
 namespace CUAFunding.Controllers
 {
     [Authorize]
+    [Route("api/[controller]/[action]")]
     public class AccountController : Controller
     {
+        [HttpPost]
         public IActionResult LogOut()
         {
             return SignOut(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
         }
 
+        [HttpGet]
         public IActionResult Login()
         {
             return Redirect("https://localhost:5001/");

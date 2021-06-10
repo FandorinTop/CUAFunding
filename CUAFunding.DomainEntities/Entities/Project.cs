@@ -21,9 +21,9 @@ namespace CUAFunding.DomainEntities.Entities
         public decimal Goal { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Сollected { get; set; }
-        public ProjectType ProjectType { get; set; }
+        public virtual ProjectType ProjectType { get; set; }
         public int PageVisitorsCount { get; set; }
-        public string ImagePath { get; set; }
+        public string MainImagePath { get; set; }
 
         public DateTime ExpirationDate { get; set; }
         public Point Location { get; set; }
@@ -31,9 +31,13 @@ namespace CUAFunding.DomainEntities.Entities
         public virtual IEnumerable<Donation> Donations { get; set; }
         public virtual IEnumerable<NeededEquipment> NeededEquipments { get; set; }
         public virtual IEnumerable<Mark> Marks { get; set; }
+
+        public virtual IEnumerable<ImagePath> ConectedImages { get; set; }
+        public virtual IEnumerable<FilePath> ConectedFiles { get; set; }
         
         public Project() : base()
         {
+            
         }
     }
 }

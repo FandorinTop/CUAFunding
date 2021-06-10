@@ -25,24 +25,6 @@ namespace CUAFunding.Configurations
                 options.UseSqlServer(configuration.GetConnectionString("Testing"),
                 x => x.UseNetTopologySuite())
                 .UseLazyLoadingProxies());
-
-            //TODO remove this
-            services.AddIdentity<ApplicationUser, ApplicationRole>(config =>
-            {
-                config.Password.RequireDigit = false;
-                config.Password.RequireLowercase = false;
-                config.Password.RequireNonAlphanumeric = false;
-                config.Password.RequireUppercase = false;
-                config.Password.RequiredLength = 6;
-            })
-              .AddEntityFrameworkStores<ApplicationDbContext>()
-              .AddDefaultTokenProviders();
-
-            services.ConfigureApplicationCookie(option =>
-            {
-                option.LoginPath = "/Account/Login";
-                option.LoginPath = "/Account/AccessDenied";
-            });
         }
 
         public static void InitProjectTempData(this IApplicationBuilder app)
@@ -70,7 +52,7 @@ namespace CUAFunding.Configurations
                 ExpirationDate = DateTime.UtcNow.AddDays(10),
                 Title = "111111",
                 Goal = 111111,
-                ImagePath = "",
+                MainImagePath = "",
                 PageVisitorsCount = 111111
             };
 
@@ -82,7 +64,7 @@ namespace CUAFunding.Configurations
                 ExpirationDate = DateTime.UtcNow.AddDays(20),
                 Title = "222222",
                 Goal = 222222,
-                ImagePath = "",
+                MainImagePath = "",
                 PageVisitorsCount = 222222
             };
 
@@ -94,7 +76,7 @@ namespace CUAFunding.Configurations
                 ExpirationDate = DateTime.UtcNow.AddDays(30),
                 Title = "333333",
                 Goal = 333333,
-                ImagePath = "",
+                MainImagePath = "",
                 PageVisitorsCount = 333333
             };
         }

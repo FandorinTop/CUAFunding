@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace CUAFunding.Controllers
 {
     [Authorize]
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ProjectController : Controller
     {
@@ -45,7 +45,7 @@ namespace CUAFunding.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         public async Task<ShowProjectViewModel> GetProject(string id)
         {
             var result = await _service.ShowProject(id);
@@ -55,7 +55,7 @@ namespace CUAFunding.Controllers
             return result;
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> EditProject([FromBody] EditProjectViewModel viewModel)
         {
             try
@@ -73,6 +73,7 @@ namespace CUAFunding.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectViewModel viewModel)
         {
@@ -109,6 +110,7 @@ namespace CUAFunding.Controllers
             return Ok();
         }
 
+        [Route("ChangeProjectImage")]
         [HttpPost]
         public async Task<IActionResult> ChangeProjectImage([FromForm] FileUploading viewModel)
         {
@@ -132,5 +134,17 @@ namespace CUAFunding.Controllers
             return Ok();
         }
 
+        [HttpGet("UserProject")]
+        public async Task<ApiResult<ShowProjectViewModel>> UserProjects(
+           int pageIndex = 0,
+           int pageSize = 10,
+           string sortColumn = null,
+           string sortOrder = null,
+           string filterColumn = null,
+           string filterQuery = null,
+           string userId = null)
+        {
+            return await _service.UserProjects(pageIndex, pageSize, sortColumn, sortOrder, filterColumn, filterQuery, userId);
+        }
     }
 }

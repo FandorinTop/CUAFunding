@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CUAFunding.Common\CUAFunding.Common.csproj" />
     <ProjectReference Include="..\CUAFunding.DomainEntities\CUAFunding.DomainEntities.csproj" />
     <ProjectReference Include="..\CUAFunding.Interfaces\CUAFunding.Interfaces.csproj" />
   </ItemGroup>

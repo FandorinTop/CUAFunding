@@ -10,11 +10,11 @@ namespace CUAFunding.DomainEntities
     {
         public string ProjectId { get; set; }
 
-        public Project Project { get; set; }
+        public virtual Project Project { get; set; }
 
         public string EquipmentId { get; set; }
 
-        public Equipment Equipment { get; set; }
+        public virtual Equipment Equipment { get; set; }
 
         public bool IsRequired { get; set; }
     }

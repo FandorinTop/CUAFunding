@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.IO;
 
@@ -47,13 +49,30 @@ namespace CUAFunding
                         ClockSkew = TimeSpan.FromSeconds(500)
                     };
                 });
+
             services.AddHttpClient();
             services.InjectDependencies(Configuration);
             services.InjectDataBase(Configuration);
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddJsonOptions(options => {
+                // set this option to TRUE to indent the JSON output
+                options.JsonSerializerOptions.WriteIndented = true;
+                // set this option to NULL to use PascalCase instead of CamelCase (default)
+                // options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            }); ;
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "../CUAFunding.Angular/ClientApp/dist";
+            });
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Description = "Swagger API v1",
+                    Title = "Swagger",
+                    Version = "1.0.0"
+                });
             });
         }
 
@@ -82,7 +101,18 @@ namespace CUAFunding
             app.UseRouting();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(options =>
+            {
+                options.DocumentTitle = "Title";
+                options.RoutePrefix = "docs";
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger UI");
+                options.DocExpansion(DocExpansion.Full);
+            });
 
 
             app.UseEndpoints(endpoints =>

@@ -1,4 +1,5 @@
-﻿using CUAFunding.DomainEntities.Entities;
+﻿using CUAFunding.DomainEntities;
+using CUAFunding.DomainEntities.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -17,6 +18,8 @@ namespace CUAFunding.DataAccess
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public virtual DbSet<Donation> Donations { get; set; }
         public virtual DbSet<Mark> Marks{ get; set; }
+        public virtual DbSet<Equipment> Equipments { get; set; }
+        public virtual DbSet<NeededEquipment> NeededEquipments { get; set; }
         #endregion
         public ApplicationDbContext() : base() { }
 

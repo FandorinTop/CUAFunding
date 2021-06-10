@@ -1,5 +1,4 @@
 ﻿using CUAFunding.Common.Exceptions;
-using CUAFunding.DataAccess;
 using CUAFunding.DomainEntities.Entities;
 using CUAFunding.DomainEntities.Enums;
 using CUAFunding.Interfaces.BussinessLogic.Providers;
@@ -7,12 +6,9 @@ using CUAFunding.Interfaces.BussinessLogic.Services;
 using CUAFunding.Interfaces.Mappers;
 using CUAFunding.Interfaces.Repository;
 using CUAFunding.ViewModels;
-using CUAFunding.ViewModels.DonationViewModel;
-using CUAFunding.ViewModels.MarkViewModel;
 using CUAFunding.ViewModels.ProjectViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -75,11 +71,11 @@ namespace CUAFunding.BusinessLogic.Services
             viewModel.OwnerId = userId;
             var project = await _projectRepository.Find(viewModel.Id);
 
-            var (isCorrectUser, message) = CheckUserId(viewModel.OwnerId, project);
-            if (!isCorrectUser)
-            {
-                throw new AuthorizationException(message);
-            }
+            //var (isCorrectUser, message) = CheckUserId(viewModel.OwnerId, project);
+            //if (!isCorrectUser)
+            //{
+            //    throw new AuthorizationException(message);
+            //}
 
             project = _projectMapper.Edit(project, viewModel);
             await _projectRepository.Update(project);
@@ -120,13 +116,27 @@ namespace CUAFunding.BusinessLogic.Services
             {
                 path = await _fileServerProvider.LoadFilesAsync(Path.Combine(GetCurrentDirectory(), $"{project.Title ?? "Unanamed"}"), file, new List<EnalableFileExtensionTypes>() { EnalableFileExtensionTypes.jpg, EnalableFileExtensionTypes.jpeg, EnalableFileExtensionTypes.png });
             }
-            if (!String.IsNullOrEmpty(project.ImagePath))
+            if (!String.IsNullOrEmpty(project.MainImagePath))
             {
-                await _fileServerProvider.DeleteFileAsync(project.ImagePath);
+                await _fileServerProvider.DeleteFileAsync(project.MainImagePath);
             }
 
-            project.ImagePath = path;
+            project.MainImagePath = path;
             await _projectRepository.Update(project);
+        }
+
+        public async Task<ApiResult<ShowProjectViewModel>> UserProjects(int pageIndex, int pageSiez, string sortColumn = null, string sortOrder = null, string filterColumn = null, string filterQuery = null, string userId = null)
+        {
+            var id = GetUserId();
+
+            if(id is null)
+            {
+                id = userId;
+            }
+
+            var projects = await _projectRepository.GetApiResult(pageIndex, pageSiez, sortColumn, sortOrder, filterColumn, filterQuery, id);
+
+            return projects;
         }
 
         private (bool, string) CheckUserId(string Id, Project project)
@@ -145,85 +155,15 @@ namespace CUAFunding.BusinessLogic.Services
             return (true, string.Empty);
         }
 
+
         private string GetUserId()
         {
-            return _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "TEST";
         }
 
         private string GetCurrentDirectory()
         {
             return _configuration["ProjectRoot:DirectoryRoot"];
-        }
-    }
-
-    public class DonationService
-    {
-        private readonly ApplicationDbContext _context;
-
-        public async Task<bool> AddDonation(AddDonationViewModel viewModel)
-        {
-            var project = await _context.Projects.FindAsync(viewModel.ProjectId);
-
-            var user = await _context.ApplicationUsers.FindAsync(viewModel.UserId);
-
-            var donation = new Donation()
-            {
-                Message = viewModel.Message,
-                Project = project,
-                User = user,
-                Value = viewModel.Value
-            };
-
-            await _context.Donations.AddAsync(donation);
-            var result = await _context.SaveChangesAsync();
-
-            return result >= 0 ? true : false;
-        }
-    }
-
-    public class MarkService
-    {
-        private readonly ApplicationDbContext _context;
-
-        private async Task<bool> AddMark(CreateMarkViewModel viewModel)
-        {
-            var project = await _context.Projects.FindAsync(viewModel.ProjectId);
-            var user = await _context.ApplicationUsers.FindAsync(viewModel.UserId);
-
-            var mark = new Mark()
-            {
-                Project = project,
-                User = user,
-                Value = viewModel.Value
-            };
-
-            await _context.Marks.AddAsync(mark);
-            var result = await _context.SaveChangesAsync();
-
-            return result >= 0 ? true : false;
-        }
-
-        public async Task<bool> UpdateMark(EditMarkViewModel viewModel)
-        {
-            var mark = await _context.Marks
-                .FirstOrDefaultAsync(item => item.ProjectId == viewModel.ProjectId && item.UserId == viewModel.UserId);
-
-            if(mark != null)
-            {
-                mark.Value = viewModel.Value;
-                var result = await _context.SaveChangesAsync();
-
-                return true;
-            }
-            else
-            {
-                return await AddMark(new CreateMarkViewModel()
-                {
-                    ProjectId = viewModel.ProjectId,
-                    UserId = viewModel.UserId,
-                    Value = viewModel.Value
-                });
-            }
         }
     }
 }
