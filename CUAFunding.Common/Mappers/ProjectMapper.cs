@@ -18,6 +18,9 @@ namespace CUAFunding.Common.Mappers
             viewModel.Description = project.Description;
             viewModel.Goal = project.Goal;
             viewModel.ExpirationDate = project.ExpirationDate;
+            viewModel.LocationX = project.Location.Coordinate.X;
+            viewModel.LocationY = project.Location.Coordinate.Y;
+            viewModel.MainImagePath = project.MainImagePath;
 
             return viewModel;
         }
@@ -60,6 +63,7 @@ namespace CUAFunding.Common.Mappers
             project.Description = viewModel.Description;
             project.Goal = viewModel.Goal;
             project.ExpirationDate = viewModel.ExpirationDate;
+            project.Location = new Point(viewModel.LocationX ?? 0, viewModel.LocationY ?? 0) { SRID = 4326 };
             ProjectValidation(project, nameof(Edit));
 
             return project;

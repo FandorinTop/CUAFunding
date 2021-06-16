@@ -26,34 +26,34 @@ namespace CUAFunding.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> EditMark([FromBody] EditMarkViewModel viewModel)
+        public async Task<IActionResult> EditMark(EditMarkViewModel viewModel)
         {
             try
             {
                 await _service.UpdateMark(viewModel);
             }
-            catch (MapperException ex)
+            catch (Exception ex)
             {
-                _logger.LogWarning($"Fail project data update project with id: {viewModel.Id} ErrorMessage: {ex.Message}");
-                return StatusCode(422, ex.Message + "\n" + ex.ValidationMessage);
+                _logger.LogWarning($"Fail project data update mark in project with id: {viewModel.Id} ErrorMessage: {ex.Message}");
+                throw ex;
             }
 
-            _logger.LogInformation($"Successfull information update project with id: {viewModel.Id}");
+            _logger.LogInformation($"Successfull information update mark in project with id: {viewModel.Id}");
 
-            return Ok();
+            return Ok(true);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMark([FromBody] CreateMarkViewModel viewModel)
+        public async Task<IActionResult> CreateMark(CreateMarkViewModel viewModel)
         {
             try
             {
                 await _service.AddMark(viewModel);
             }
-            catch (MapperException ex)
+            catch (Exception ex)
             {
                 _logger.LogWarning($"Fail create mark ErrorMessage: {ex.Message}");
-                return StatusCode(422, ex.Message + "\n" + ex.ValidationMessage);
+                throw ex;
             }
 
             _logger.LogInformation($"Successfull added mark to: {viewModel.ProjectId}");

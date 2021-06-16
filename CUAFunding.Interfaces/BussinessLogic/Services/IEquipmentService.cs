@@ -1,5 +1,6 @@
 ﻿using CUAFunding.ViewModels;
 using CUAFunding.ViewModels.EquipmentVIewModel;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CUAFunding.Interfaces.BussinessLogic.Services
@@ -15,6 +16,8 @@ namespace CUAFunding.Interfaces.BussinessLogic.Services
             string filterQuery = null);
 
         public Task<ShowEquipmentViewModel> GetEquipmentById(string id);
+
+        public Task CreateEquipments(IEnumerable<CreateEquipmentViewModel> viewModels);
 
         public Task<string> CreateEquipment(CreateEquipmentViewModel viewModel);
 

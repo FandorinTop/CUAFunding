@@ -18,5 +18,7 @@ namespace CUAFunding.ViewModels.BaseViewModel
         public double? LocationY { get; set; }
 
         public DateTime ExpirationDate { get; set; }
+
+        public string MainImagePath { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace CUAFunding.DomainEntities.Entities.Base
             LastEditDate = DateTime.UtcNow;
             Id = Guid.NewGuid().ToString();
         }
+
         [Key]
         public string Id { get; set; }
 

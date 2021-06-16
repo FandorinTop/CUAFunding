@@ -2,6 +2,31 @@
     <h1>{{title}}</h1>
 
     <p *ngIf="this.id && !project"><em>Loading...</em></p>
+    
+    <div class="container">
+    
+      <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" (mapClick)="mapClicked($event)">
+        <agm-marker 
+          *ngFor="let p of projects; let i = index"
+          (markerClick)="clickedMarker(p.title, i)"
+          [latitude]="p.locationX"
+          [longitude]="p.locationY"
+          [label]="">
+          
+        <agm-info-window>
+          <strong>{{p.title}}</strong>
+        </agm-info-window>
+        
+      </agm-marker>
+        <!-- <agm-marker *ngIf="!project" [latitude]="project.locationY" [longitude]="project.locationX" [markerDraggable]="true"></agm-marker> -->
+      </agm-map>
+      
+      <h5>Address:  {{address}}</h5>
+      <div>Latitude: {{latitude}}</div>
+      <div>Longitude: {{longitude}}</div>
+      
+    </div>
+
 
     <div class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
@@ -44,7 +69,7 @@
       <div class="form-group">
         <label for="locationY">ISO 3166-1 ALPHA-3 Country Code (3 letters)</label>
         <br />
-        <input type="text" id="locationY"
+        <input  type="text" id="locationY"
                formControlName="locationY" required
                placeholder="3 letters country code..."
                class="form-control" />

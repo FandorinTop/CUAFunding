@@ -24,9 +24,9 @@ namespace CUAFunding.DomainEntities.Entities
         public virtual ProjectType ProjectType { get; set; }
         public int PageVisitorsCount { get; set; }
         public string MainImagePath { get; set; }
-
         public DateTime ExpirationDate { get; set; }
         public Point Location { get; set; }
+
 
         public virtual IEnumerable<Donation> Donations { get; set; }
         public virtual IEnumerable<NeededEquipment> NeededEquipments { get; set; }

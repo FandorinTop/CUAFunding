@@ -4,7 +4,7 @@ namespace CUAFunding.ViewModels.ProjectEquipment
 {
     public class BaseEquipmentItem
     {
-        public string Id { get; set; }
+        public string Name { get; set; }
 
         public bool IsRequired { get; set; }
 

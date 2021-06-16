@@ -52,6 +52,28 @@ namespace CUAFunding.IdentityServer
 
             yield return new Client()
             {
+                ClientId = "CUAFunding_id_chat",
+                ClientSecrets = { new Secret("CUAFunding_id_secret_chat".ToSha256()) },
+                RequirePkce = true,
+                AllowedGrantTypes = GrantTypes.Code,
+                AllowedScopes =
+                {
+                    "ProductAPI",
+                    "Read",
+                    "Write",
+                    "Delete",
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.OpenId,
+                },
+                RedirectUris = { "https://localhost:44377" },
+                PostLogoutRedirectUris = { "https://localhost:44377" },
+                RequireConsent = false,
+                AccessTokenLifetime = 3000,
+                AllowOfflineAccess = true,
+            };
+
+            yield return new Client()
+            {
                 ClientId = "CUAFunding_id_client",
                 ClientSecrets = { new Secret("CUAFunding_id_secret_client".ToSha256()) },
                 AllowedGrantTypes = GrantTypes.Code,

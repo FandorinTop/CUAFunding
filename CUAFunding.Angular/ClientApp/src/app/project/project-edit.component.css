@@ -12,3 +12,15 @@ input.ng-valid {
     display: block;
   }
   
+  agm-map {
+    height: 300px;
+    width: 300px;
+  }
+  
+  * {
+    font-family: Lato;
+  }
+  
+  a {
+    color: darkblue;
+  }

@@ -42,6 +42,10 @@ namespace CUAFunding.Configurations
 
             #region Services
             service.AddTransient<IAccountService, AccountService>();
+            service.AddTransient<IDonationService, DonationService>();
+            service.AddTransient<IEquipmentService, EquipmentService>();
+            service.AddTransient<IMarkService, MarkService>();
+            service.AddTransient<IProjectEquipmentService, ProjectEquipmentService>();
             service.AddTransient<IProjectService, ProjectService>();
             #endregion
 

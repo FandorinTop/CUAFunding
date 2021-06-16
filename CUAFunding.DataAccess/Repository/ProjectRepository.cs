@@ -39,7 +39,9 @@ namespace CUAFunding.DataAccess.Repository
                 Goal = proj.Goal,
                 LocationX = proj.Location.Coordinate.X,
                 LocationY = proj.Location.Coordinate.Y,
-                ExpirationDate = proj.ExpirationDate
+                ExpirationDate = proj.ExpirationDate,
+                MainImagePath = proj.MainImagePath,
+                Description = proj.Description
             });
 
             if (!String.IsNullOrEmpty(filterColumn) && !String.IsNullOrEmpty(filterQuery) && entityType.IsValidProperty(filterColumn))
@@ -119,7 +121,9 @@ namespace CUAFunding.DataAccess.Repository
                 Goal = proj.Goal,
                 LocationX = proj.Location.Coordinate.X,
                 LocationY = proj.Location.Coordinate.Y,
-                ExpirationDate = proj.ExpirationDate
+                ExpirationDate = proj.ExpirationDate,
+                MainImagePath = proj.MainImagePath,
+                Description = proj.Description
             });
 
             if (!String.IsNullOrEmpty(userId) && !String.IsNullOrEmpty(userId))

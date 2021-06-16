@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -14,6 +15,7 @@ import { ProjectComponent } from './project/project.component';
 import { AngularMaterialModule } from './angular-material.module';
 import { ProjectEditComponent } from './project/project-edit.component';
 import { BaseFormComponent } from './base.form.component';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
   declarations: [
@@ -24,9 +26,13 @@ import { BaseFormComponent } from './base.form.component';
     CounterComponent,
     FetchDataComponent,
     ProjectComponent,
-    ProjectEditComponent
+    ProjectEditComponent,
+    MapComponent
   ],
   imports: [
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyAd2NVFngllAuN-nPmPXKYEkdiApMVKmpk'
+    }),
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,

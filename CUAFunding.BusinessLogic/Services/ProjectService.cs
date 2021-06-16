@@ -26,7 +26,7 @@ namespace CUAFunding.BusinessLogic.Services
         private IProjectMapper _projectMapper;
         private IHttpContextAccessor _httpContextAccessor;
         private IFileServerProvider _fileServerProvider;
-        private IConfiguration _configuration;
+        private string _currentDirectory;
         #endregion
 
         public ProjectService(IProjectRepository projectRepository, IProjectMapper projectMapper, IHttpContextAccessor httpContextAccessor, IFileServerProvider fileServerProvider, IConfiguration configuration)
@@ -35,7 +35,7 @@ namespace CUAFunding.BusinessLogic.Services
             _projectMapper = projectMapper;
             _httpContextAccessor = httpContextAccessor;
             _fileServerProvider = fileServerProvider;
-            _configuration = configuration;
+            _currentDirectory = configuration["ProjectRoot:DirectoryRoot"];
         }
 
         public async Task<string> CreateProject(CreateProjectViewModel viewModel)
@@ -114,7 +114,7 @@ namespace CUAFunding.BusinessLogic.Services
 
             if (file != null)
             {
-                path = await _fileServerProvider.LoadFilesAsync(Path.Combine(GetCurrentDirectory(), $"{project.Title ?? "Unanamed"}"), file, new List<EnalableFileExtensionTypes>() { EnalableFileExtensionTypes.jpg, EnalableFileExtensionTypes.jpeg, EnalableFileExtensionTypes.png });
+                path = await _fileServerProvider.LoadFilesAsync(Path.Combine(_currentDirectory, $"{project.Title ?? "Unanamed"}"), file, new List<EnalableFileExtensionTypes>() { EnalableFileExtensionTypes.jpg, EnalableFileExtensionTypes.jpeg, EnalableFileExtensionTypes.png });
             }
             if (!String.IsNullOrEmpty(project.MainImagePath))
             {
@@ -155,15 +155,9 @@ namespace CUAFunding.BusinessLogic.Services
             return (true, string.Empty);
         }
 
-
         private string GetUserId()
         {
             return _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "TEST";
-        }
-
-        private string GetCurrentDirectory()
-        {
-            return _configuration["ProjectRoot:DirectoryRoot"];
         }
     }
 }

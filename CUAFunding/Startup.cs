@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -17,7 +19,6 @@ using System.IO;
 
 namespace CUAFunding
 {
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -29,6 +30,18 @@ namespace CUAFunding
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var logger = actionContext.HttpContext.RequestServices.GetRequiredService<ILogger<ApiBehaviorOptions>>();
+                    var result = new BadRequestObjectResult(actionContext.ModelState);
+                    logger.LogWarning($"Validation Error at path: {actionContext.HttpContext.Request.Path}");
+
+                    return result;
+                };
+            });
+
             services.AddAuthentication(config =>
             {
                 config.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -53,13 +66,12 @@ namespace CUAFunding
             services.AddHttpClient();
             services.InjectDependencies(Configuration);
             services.InjectDataBase(Configuration);
+
             services.AddControllersWithViews()
                 .AddJsonOptions(options => {
-                // set this option to TRUE to indent the JSON output
                 options.JsonSerializerOptions.WriteIndented = true;
-                // set this option to NULL to use PascalCase instead of CamelCase (default)
-                // options.JsonSerializerOptions.PropertyNamingPolicy = null;
-            }); ;
+            }); 
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "../CUAFunding.Angular/ClientApp/dist";
@@ -76,7 +88,7 @@ namespace CUAFunding
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILogger<Startup> logger)
         {
             if (env.IsDevelopment() || env.IsTesting())
             {
@@ -87,6 +99,8 @@ namespace CUAFunding
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+            app.ConfigureExceptionHandler(env, logger);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles(new StaticFileOptions
@@ -99,9 +113,7 @@ namespace CUAFunding
             }
 
             app.UseRouting();
-
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseSwagger();
@@ -113,7 +125,6 @@ namespace CUAFunding
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger UI");
                 options.DocExpansion(DocExpansion.Full);
             });
-
 
             app.UseEndpoints(endpoints =>
             {

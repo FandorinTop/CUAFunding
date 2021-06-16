@@ -1,15 +1,16 @@
-import { Component, Inject } from '@angular/core';
 // import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { BaseFormComponent } from '../base.form.component';
+import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 
 import { ProjectService } from './project.service';
 import { Project } from './project';
 import { ApiResult } from '../base.service';
 import { stringify } from 'querystring';
+import { MapsAPILoader, MouseEvent } from '@agm/core';
 
 @Component({
   selector: 'app-project-edit',
@@ -19,14 +20,19 @@ import { stringify } from 'querystring';
 export class ProjectEditComponent
   extends BaseFormComponent {
 
+  latitude: number = 36;
+  longitude: number = 50;
+  zoom: number = 7;
+
   // the view title
   title: string;
 
+  projects: Project[] = [];
   // the form model
   form: FormGroup;
 
   // the city object to edit or create
-  project: Project;
+  project: Project = <Project>{};
 
   // the city object id, as fetched from the active route:
   // It's NULL when we're adding a new city,
@@ -37,6 +43,8 @@ export class ProjectEditComponent
   activityLog: string = '';
 
   constructor(
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone,
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -45,9 +53,10 @@ export class ProjectEditComponent
   }
 
   ngOnInit() {
-    console.log("Id: " + this.activatedRoute.snapshot.paramMap.get('id'))
-
     this.loadData();
+    this.mapsAPILoader.load();
+    console.log("project:" + this.project);
+    console.log("Id: " + this.activatedRoute.snapshot.paramMap.get('id'));
 
     this.form = this.fb.group({
       title: ['', Validators.required],
@@ -84,7 +93,29 @@ export class ProjectEditComponent
           this.log("Name was updated by the user.");
         }
       });
+  }
 
+  mapClicked($event: MouseEvent): void {
+    console.log("lat:" + $event.coords.lat);
+    console.log("lng:" + $event.coords.lng);
+    
+    this.longitude = $event.coords.lng;
+    this.latitude = $event.coords.lat;
+    
+    this.project.locationX = this.longitude;
+    this.project.locationY = this.latitude;
+    this.project.title = "lat:" + $event.coords.lat + "lng:" + $event.coords.lng;
+
+    if(this.projects.length>0){
+      this.projects.pop();
+    }
+
+    this.projects.push(this.project);
+  }
+
+  changeMarkerPosition(){
+    this.projects.pop();
+    this.projects.push(this.project);
   }
 
   log(str: string) {
@@ -109,11 +140,18 @@ export class ProjectEditComponent
 
         // update the form with the city value
         this.form.patchValue(this.project);
+
+        if(this.project){
+          this.longitude = this.project.locationX;
+          this.latitude = this.project.locationY;
+          this.projects = [];
+          this.projects.push(this.project);
+        }
+        
       }, error => console.error(error));
     }
     else {
       // ADD NEW MODE
-
       this.title = "Create a new Project";
     }
   }
@@ -139,7 +177,7 @@ export class ProjectEditComponent
           console.log("Project " + project.id + " has been updated.");
 
           // go back to cities view
-          this.router.navigate(['/project']);
+          this.router.navigate(['/admin/projects']);
         }, error => console.error(error));
     }
     else {    
@@ -153,7 +191,7 @@ export class ProjectEditComponent
           console.log("Project " + result.id + " has been created.");
 
           // go back to cities view
-          this.router.navigate(['/project']);
+          this.router.navigate(['/admin/projects']);
         }, error => console.error(error));
     }
   }
