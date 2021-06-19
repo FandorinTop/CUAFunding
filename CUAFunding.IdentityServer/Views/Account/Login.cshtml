@@ -3,44 +3,68 @@
 @{
     ViewData["Title"] = "View";
 }
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Login - Brand</title>
+    <link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
+    <link rel="stylesheet" href="~/assets/fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
+    <link rel="stylesheet" href="~/assets/css/smoothproducts.css">
+</head>
 
-<h1>View</h1>
+<main class="page login-page">
+    <section class="clean-block clean-form dark">
+        <div class="container">
+            <div class="block-heading">
+                <h2 class="text-info">Log In</h2>
+                <p></p>
+            </div>
+            <form asp-action="Login">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label hidden asp-for="ReturnUrl" class="control-label"></label>
+                    <input hidden asp-for="ReturnUrl" class="form-control" />
+                    <span asp-validation-for="ReturnUrl" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Login" class="btn btn-primary" />
+                </div>
+            </form>
+            <form class="form-group" asp-action="Register"  method="get" asp-route-returnUrl="@Model.ReturnUrl">
+                <button type="submit"  class="btn btn-primary" name="provider">SignUp</button>
+            </form>
+            <form class="form-group" asp-action="ExternalSignin"  asp-route-returnUrl="@Model.ReturnUrl">
+                @foreach (var provider in Model.ExternalProviders)
+                {
+                    <button type="submit" name="provider" value="@provider.Name">@provider.DisplayName</button>
+                }
+            </form>
 
-<h4>LoginAccountView</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label hidden asp-for="ReturnUrl" class="control-label"></label>
-                <input hidden asp-for="ReturnUrl" class="form-control" />
-                <span asp-validation-for="ReturnUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-    <form class="form-group" asp-action="ExternalSignin" asp-route-returnUrl="@Model.ReturnUrl">
-        @foreach (var provider in Model.ExternalProviders)
-        {
-            <button type="submit" name="provider" value="@provider.Name">@provider.DisplayName</button>
-        }
-    </form>
-</div>
+        </div>
+    </section>
+</main>
 
 
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+<script src="~/assets/js/smoothproducts.min.js"></script>
+<script src="~/assets/js/theme.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 @section Scripts {
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

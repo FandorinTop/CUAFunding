@@ -1,16 +1,20 @@
 <div class="project-edit">
     <h1>{{title}}</h1>
 
-    <p *ngIf="this.id && !project"><em>Loading...</em></p>
+    <p *ngIf="this.id && !project">
+      <em>        
+        {{'Loading' | translate}}
+      </em>
+    </p>
     
-    <div class="container">
-    
-      <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" (mapClick)="mapClicked($event)">
+    <div class="form-group">   
+      <div class="form-group">
+      <agm-map [latitude]="longitude" [longitude]="latitude" [zoom]="zoom" (mapClick)="mapClicked($event)">
         <agm-marker 
           *ngFor="let p of projects; let i = index"
           (markerClick)="clickedMarker(p.title, i)"
-          [latitude]="p.locationX"
-          [longitude]="p.locationY"
+          [latitude]="p.locationY"
+          [longitude]="p.locationX"
           [label]="">
           
         <agm-info-window>
@@ -20,102 +24,112 @@
       </agm-marker>
         <!-- <agm-marker *ngIf="!project" [latitude]="project.locationY" [longitude]="project.locationX" [markerDraggable]="true"></agm-marker> -->
       </agm-map>
-      
-      <h5>Address:  {{address}}</h5>
       <div>Latitude: {{latitude}}</div>
-      <div>Longitude: {{longitude}}</div>
-      
+      <div>Longitude: {{longitude}}</div>  
+    </div> 
     </div>
 
 
     <div class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="name">Project title:</label>
+        <label for="name">
+        {{'project.title.title' | translate}}
+      </label>
         <br />
         <input type="text" id="title"
                formControlName="title" required
-               placeholder="Project title..."
+               placeholder="{{'project.title.placeHolder' | translate}}"
                class="form-control" />
 
         <div *ngIf="form.get('title').invalid &&
                  (form.get('title').dirty || form.get('title').touched)"
              class="invalid-feedback">
           <div *ngIf="form.get('title').errors?.required">
-            Name is required.
+            {{'project.title.required' | translate}}
           </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="iso2">Lon</label>
+        <label for="iso2"> 
+            {{'project.lon.title' | translate}}
+        </label>
         <br />
-        <input type="text" id="locationX"
+        <input [(ngModel)]="longitude"
+        type="text" id="locationX"
                formControlName="locationX" required
-               placeholder="Lon..."
+               placeholder="{{'project.lon.placeHolder' | translate}}"
                class="form-control" />
 
         <div *ngIf="form.get('locationX').invalid &&
                  (form.get('locationX').dirty || form.get('locationX').touched)"
              class="invalid-feedback">
           <div *ngIf="form.get('locationX').errors?.required">
-            ISO 3166-1 ALPHA-2 country code is required.
+            {{'project.lon.required' | translate}}
           </div>
           <div *ngIf="form.get('locationX').errors?.pattern">
-            ISO 3166-1 ALPHA-2 country code requires 2 letters.
+            {{'project.lon.pattern' | translate}}
           </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="locationY">ISO 3166-1 ALPHA-3 Country Code (3 letters)</label>
+        <label for="locationY">
+          {{'project.lat.title' | translate}}
+        </label>
         <br />
-        <input  type="text" id="locationY"
+        <input [(ngModel)]="latitude"
+        type="text" id="locationY"
                formControlName="locationY" required
-               placeholder="3 letters country code..."
+               placeholder="{{'project.lat.placeHolder' | translate}}"
                class="form-control" />
 
         <div *ngIf="form.get('locationY').invalid &&
                  (form.get('locationY').dirty || form.get('locationY').touched)"
              class="invalid-feedback">
           <div *ngIf="form.get('locationY').errors?.required">
-            ISO 3166-1 ALPHA-3 country code is required.
+            {{'project.lat.required' | translate}}
           </div>
           <div *ngIf="form.get('locationY').errors?.pattern">
-            ISO 3166-1 ALPHA-3 country code requires 3 letters.
+            {{'project.lat.pattern' | translate}}
           </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="goal">goal</label>
+        <label for="goal">
+            {{'project.goal.title' | translate}}
+        </label>
         <br />
         <input type="text" id="goal"
                formControlName="goal" required
-               placeholder="goal..."
+               placeholder="{{'project.goal.placeHolder' | translate}}"
                class="form-control" />
 
         <div *ngIf="form.get('goal').invalid &&
                  (form.get('goal').dirty || form.get('goal').touched)"
              class="invalid-feedback">
           <div *ngIf="form.get('goal').errors?.pattern">
-            pattern
+            {{'project.goal.pattern' | translate}}
           </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="expirationDate">expirationDate</label>
+        <label for="expirationDate"> 
+           {{'project.expirationDate.title' | translate}}
+        </label>
         <br />
         <input type="date" id="expirationDate"
                formControlName="expirationDate" required
-               placeholder="expirationDate..."
+               placeholder="{{'project.expirationDate.placeHolder' | translate}}"
                class="form-control" />
 
         <div *ngIf="form.get('expirationDate').invalid &&
                  (form.get('expirationDate').dirty || form.get('expirationDate').touched)"
              class="invalid-feedback">
           <div *ngIf="form.get('locationY').errors?.required">
-            ISO 3166-1 ALPHA-3 country code is required.
+            {{'project.expirationDate.required' | translate}}
           </div>
           <div *ngIf="form.get('expirationDate').errors?.pattern">
             pattern
@@ -128,18 +142,18 @@
                 (click)="onSubmit()"
                 [disabled]="form.invalid"
                 class="btn btn-success">
-          Save
+                {{'buttons.save' | translate}}
         </button>
         <button *ngIf="!id" type="submit"
                 (click)="onSubmit()"
                 [disabled]="form.invalid"
                 class="btn btn-success">
-          Create
+                {{'buttons.create' | translate}}
         </button>
         <button type="button"
                 [routerLink]="['/cities']"
                 class="btn">
-          Cancel
+                {{'buttons.cancel' | translate}}
         </button>
       </div>
       </div>

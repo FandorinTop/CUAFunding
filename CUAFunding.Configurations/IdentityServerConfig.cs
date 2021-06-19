@@ -18,7 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NetTopologySuite;
-
+using System.Security.Claims;
+using IdentityServer4.Services;
 
 namespace CUAFunding.IdentityServer
 {
@@ -35,6 +36,7 @@ namespace CUAFunding.IdentityServer
                 AllowedGrantTypes = GrantTypes.Code,
                 AllowedScopes =
                 {
+                    "roles",
                     "ProductAPI",
                     "Read",
                     "Write",
@@ -57,7 +59,8 @@ namespace CUAFunding.IdentityServer
                 RequirePkce = true,
                 AllowedGrantTypes = GrantTypes.Code,
                 AllowedScopes =
-                {
+                {   
+                    "roles",
                     "ProductAPI",
                     "Read",
                     "Write",
@@ -71,7 +74,6 @@ namespace CUAFunding.IdentityServer
                 AccessTokenLifetime = 3000,
                 AllowOfflineAccess = true,
             };
-
             yield return new Client()
             {
                 ClientId = "CUAFunding_id_client",
@@ -79,6 +81,7 @@ namespace CUAFunding.IdentityServer
                 AllowedGrantTypes = GrantTypes.Code,
                 AllowedScopes =
                 {
+                    "roles",
                     "ProductAPI",
                     "Read",
                     "Write",
@@ -92,6 +95,28 @@ namespace CUAFunding.IdentityServer
                 AccessTokenLifetime = 3000,
                 AllowOfflineAccess = true,
             };
+            yield return new Client()
+            {
+                ClientId = "xamarin",
+                RequirePkce = true,
+                RequireClientSecret = false,
+                AllowedGrantTypes = GrantTypes.Code,
+                AllowedScopes =
+                {
+                    "roles",
+                    "ProductAPI",
+                    "Read",
+                    "Write",
+                    "Delete",
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.OpenId,
+                },
+                RedirectUris = { "xamarinformsclients://callback" },
+                RequireConsent = false,
+                AllowAccessTokensViaBrowser = true,
+                AccessTokenLifetime = 3000,
+                AllowOfflineAccess = true,
+            };
         }
         public static IEnumerable<ApiResource> GetApiResources()
         {
@@ -102,6 +127,12 @@ namespace CUAFunding.IdentityServer
         {
             yield return new IdentityResources.OpenId();
             yield return new IdentityResources.Profile();
+            yield return new IdentityResource
+            {
+                Name = "roles",
+                DisplayName = "Roles",
+                UserClaims = { JwtClaimTypes.Role }
+            };
         }
 
         public static IEnumerable<ApiScope> GetApiScopes()
@@ -110,10 +141,12 @@ namespace CUAFunding.IdentityServer
             yield return new ApiScope("Write", "Write data");
             yield return new ApiScope("Delete", "Delete data");
             yield return new ApiScope("Admin", "Admin data");
+            yield return new ApiScope("Admin", "Admin data");
         }
 
         public static void InjectIdentityServer(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<IProfileService, ProfileService>();
             services.AddTransient<RoleManager<ApplicationRole>>();
             services.AddTransient<SignInManager<ApplicationUser>>();
             services.AddTransient<UserManager<ApplicationUser>>();
@@ -146,6 +179,7 @@ namespace CUAFunding.IdentityServer
                     option.ConfigureDbContext = builder => builder.UseSqlServer(connectionString,
                         sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
+
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = builder =>
@@ -165,8 +199,10 @@ namespace CUAFunding.IdentityServer
                     config.ClientId = "1072607496895-sg4osbuo1nr3lnv7t2lenj89pfklvctn.apps.googleusercontent.com";
                     config.ClientSecret = "afaohp9YskbDTRayonH5I-4T";
                 });
+
+
         }
-        
+
         public static void InitializeIdentityServerDatabase(this IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
@@ -178,7 +214,8 @@ namespace CUAFunding.IdentityServer
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                 var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
-                var amin =  userManager.FindByNameAsync("Admin").GetAwaiter().GetResult();
+
+                var amin =  userManager.FindByNameAsync("SuperAdmin1").GetAwaiter().GetResult();
 
                 if (!roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
                 {
@@ -217,10 +254,10 @@ namespace CUAFunding.IdentityServer
 
         private async static Task CreateAdminUser(UserManager<ApplicationUser> userManager)
         {
-            var email = "ADMINIDENTITY@admin.com";
+            var email = "SUPERADMIN1@admin.com";
             var password = "ADMINIDENTITY!123aa";
             var user = new ApplicationUser();
-            user.UserName = "Admin";
+            user.UserName = "SuperAdmin1";
             user.NormalizedEmail = email.ToUpper();
             user.NormalizedUserName = email.ToUpper();
             user.Email = email;
@@ -232,6 +269,7 @@ namespace CUAFunding.IdentityServer
 
             ApplicationUser applicationUser = await userManager.FindByNameAsync(user.UserName);
 
+            await userManager.AddClaimAsync(applicationUser, new Claim(JwtClaimTypes.Role, "Admin"));
             await userManager.AddToRoleAsync(applicationUser, "Admin");
         }
     }

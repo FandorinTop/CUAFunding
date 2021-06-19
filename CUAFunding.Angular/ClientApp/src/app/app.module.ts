@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AgmCoreModule } from '@agm/core';
 
@@ -16,6 +16,14 @@ import { AngularMaterialModule } from './angular-material.module';
 import { ProjectEditComponent } from './project/project-edit.component';
 import { BaseFormComponent } from './base.form.component';
 import { MapComponent } from './map/map.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+//import { FooterComponent } from './footer/footer.component';
+
+export function HttpLoaderFactory(http: HttpClient){
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -27,9 +35,23 @@ import { MapComponent } from './map/map.component';
     FetchDataComponent,
     ProjectComponent,
     ProjectEditComponent,
+    //FooterComponent,
     MapComponent
   ],
+  exports:[
+    //FooterComponent
+  ],
   imports: [
+    HttpClientModule,
+    BrowserModule,
+    TranslateModule.forRoot({
+      loader:{
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      },
+      defaultLanguage: 'ru'
+    }),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAd2NVFngllAuN-nPmPXKYEkdiApMVKmpk'
     }),
@@ -48,6 +70,7 @@ import { MapComponent } from './map/map.component';
     BrowserAnimationsModule,
     BrowserAnimationsModule,
     AngularMaterialModule,
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

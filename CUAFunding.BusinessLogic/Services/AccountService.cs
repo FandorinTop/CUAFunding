@@ -114,11 +114,9 @@ namespace CUAFunding.BusinessLogic.Services
             var result = await _userManager.CreateAsync(user, viewModel.Password);
             if (!result.Succeeded)
             {
-                throw new AuthorizationException("Registration error", (IEnumerable<Exception>)result.Errors);
+                throw new AuthorizationException("Registration error") { ErrorMessages = result.Errors.Select(item => item.Description).ToList()};
             }
             var registredUser = await _userManager.FindByNameAsync(viewModel.Email);
-
-            await _userManager.AddToRoleAsync(registredUser, "");
         }
 
         public async Task SignIn(LoginAccountView viewModel)
@@ -134,6 +132,9 @@ namespace CUAFunding.BusinessLogic.Services
             {
                 throw new AuthorizationException("Wrong password");
             }
+
+            var claims = await _userManager.GetClaimsAsync(user);
+
         }
 
         public async Task SignOut()

@@ -6,4 +6,9 @@ table {
     font-size: 14px;
     width: 100%;
   }
+
+  agm-map {
+    height: 1000px;
+    width: 1000px;
+  }
   

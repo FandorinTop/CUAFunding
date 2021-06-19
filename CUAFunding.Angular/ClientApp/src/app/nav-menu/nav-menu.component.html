@@ -3,7 +3,7 @@
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
   >
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">CUAFunding</a>
+      <a class="navbar-brand" [routerLink]="['/']">{{'header.title' | translate}}</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -23,17 +23,23 @@
           <li class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+            <a class="nav-link text-dark" [routerLink]="['/']">{{'header.title' | translate}}</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']">Counter</a>
+            <a class="nav-link text-dark" [routerLink]="['/admin/projects']">{{'header.projects' | translate}}</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Fetch data</a>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="https://localhost:44377/">{{'header.chats' | translate}}</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/admin/projects']">Projects</a>
-          </li>
+          
+          <mat-form-field appearance="fill">
+            <mat-label (selectionChange)="langChange($event)" >Select</mat-label>
+            <mat-select (selectionChange)="langChange($event)">
+              <mat-option  value="en">{{'LangButton.en' | translate}}</mat-option>
+              <mat-option  value="ru">{{'LangButton.ru' | translate}}</mat-option>
+              <mat-option  value="ua">{{'LangButton.ua' | translate}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </ul>
       </div>
     </div>

@@ -32,6 +32,45 @@ namespace CUAFunding.IdentityServer.Controllers
             _interactionService = interactionService;
         }
 
+        public IActionResult Register(string returnUrl)
+        {
+            RegisterAccountView viewModel = new RegisterAccountView();
+            viewModel.CurrentUrl = returnUrl == null ? null : new Uri(returnUrl);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterAccountView viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            try
+            {
+                await _accountService.RegistrationUser(viewModel);
+
+            }
+            catch (AuthorizationException ex)
+            {
+                ModelState.AddModelError(nameof(viewModel.Email), ex.Message);
+                foreach (var item in ex.ErrorMessages)
+                {
+                    ModelState.AddModelError(viewModel.Email, item);
+
+                }
+                _logger.LogWarning($"Wrong Registration with email: {viewModel.Email} ErrorMessage: {ex.Message} at : {DateTime.UtcNow}");
+                return View(viewModel);
+            }
+
+            if (viewModel.CurrentUrl == null) {
+               return RedirectToAction("Login");
+            }
+
+            return Redirect(viewModel.CurrentUrl.AbsoluteUri);
+        }
+
         public async Task<IActionResult> Login(string returnUrl)
         {
             LoginAccountView viewModel = new LoginAccountView();
@@ -52,6 +91,7 @@ namespace CUAFunding.IdentityServer.Controllers
             {
                 ModelState.AddModelError(nameof(viewModel.Email), ex.Message);
                 _logger.LogWarning($"Wrong Authorization with email: {viewModel.Email} ErrorMessage: {ex.Message} at : {DateTime.UtcNow}");
+                viewModel.ExternalProviders = await _accountService.GetExternalProviders();
                 return View(viewModel);
             }
             _logger.LogInformation($"User Authorization with email: {viewModel.Email} at : {DateTime.UtcNow}");

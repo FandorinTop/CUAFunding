@@ -1,12 +1,12 @@
-<h1>Project</h1>
+<h1>{{'projects.title' | translate}}</h1>
 
-<p *ngIf="!projects"><em>Loading...</em></p>
+<p *ngIf="!projects"><em>{{'projects.title' | translate}}</em></p>
 
 <div class="commands text-right" *ngIf="projects">
   <button type="button"
           [routerLink]="['/admin/project']"
           class="btn btn-success">
-      Add a new Projects
+          {{'projects.AddANewProjects' | translate}}
   </button>
 </div>
 
@@ -68,10 +68,40 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-﻿
+
 <!-- Pagination directive -->
-<mat-paginator [hidden]="!cities"
+<mat-paginator [hidden]="!projects"
     (page)="getData($event)"
     [pageSize]="10"
     [pageSizeOptions]="[10, 20, 50]"
     showFirstLastButtons></mat-paginator>
+
+    <br/>
+    <br/>
+    <br/>
+
+
+    <div class="commands text-info">
+      <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" (mapClick)="mapClicked($event)">
+        <agm-marker 
+          *ngFor="let p of mapProject; let i = index"
+          (markerClick)="clickedMarker(p.title, i)"
+          [latitude]="p.locationY"
+          [longitude]="p.locationX"
+          [label]="{ color: 'maroon',
+          fontFamily: '',
+          fontSize: '14px',
+          fontWeight: 'bold',
+           text: p.title}">
+          
+        <agm-info-window>
+          <!-- <a >{{p.id}}</a> -->
+          <strong>Title: {{p.title}} </strong> <br/>
+          <strong>Goal: {{p.goal}}</strong> <br/>
+          <strong><a [routerLink]="['/admin/project', p.id]">visitPage</a></strong>
+        </agm-info-window>
+        
+      </agm-marker>
+        <!-- <agm-marker *ngIf="!project" [latitude]="project.locationY" [longitude]="project.locationX" [markerDraggable]="true"></agm-marker> -->
+      </agm-map>
+    </div>

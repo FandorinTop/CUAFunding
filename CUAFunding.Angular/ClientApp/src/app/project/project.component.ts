@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { Project } from './project';
 import { ProjectService } from './project.service';
 import { ApiResult } from '../base.service';
+import { MapsAPILoader, MouseEvent } from '@agm/core';
 
 @Component({
   selector: 'app-project',
@@ -17,8 +18,15 @@ export class ProjectComponent {
   public displayedColumns: string[] = ['id', 'title', 'locationX', 'locationY', 'goal', 'expirationDate'];
   public projects: MatTableDataSource<Project>;
 
+  public mapProject: Project[];
+
   defaultPageIndex: number = 0;
   defaultPageSize: number = 10;
+
+  latitude: number = 50;
+  longitude: number = 36;
+  zoom: number = 7;
+
   public defaultSortColumn: string = "title";
   public defaultSortOrder: string = "asc";
 
@@ -28,7 +36,8 @@ export class ProjectComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(
+  constructor(    
+    private mapsAPILoader: MapsAPILoader,
     private cityService: ProjectService) {
   }
 
@@ -72,10 +81,17 @@ export class ProjectComponent {
       filterColumn,
       filterQuery)
       .subscribe(result => {
+        
+        this.mapProject = result.data;
+
+        console.log("projects: " + this.mapProject);
+
         this.paginator.length = result.totalCount;
         this.paginator.pageIndex = result.pageIndex;
         this.paginator.pageSize = result.pageSize;
         this.projects = new MatTableDataSource<Project>(result.data);
+        this.mapsAPILoader.load();
+
       }, error => console.error(error));
   }
 }

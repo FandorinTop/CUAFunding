@@ -23,6 +23,7 @@ namespace CUAFunding.IdentityServer
             IdentityModelEventSource.ShowPII = true;
 
             services.InjectIdentityServer(Configuration);
+
             services.AddControllersWithViews();
 
             services.AddSwaggerGen(options =>
@@ -42,6 +43,8 @@ namespace CUAFunding.IdentityServer
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 

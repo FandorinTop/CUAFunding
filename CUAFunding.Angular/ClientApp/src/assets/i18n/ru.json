@@ -1,0 +1,62 @@
+{
+    "Loading": "Загрузка...",
+    "header": {
+        "title": "Админ",
+        "projects": "Проекти",
+        "chats": "Чаты"
+    },
+    "Index":{
+        "title": "CUAFunding новая краудфандинговая платформа",
+        "MainBody": "CUAFunding - это твой вклад в развитие сильного и открытого общества, где ты можешь собрать деньги на проект. Стань соучасником добрых дел или поддержи их финансово.",
+        "": ""
+    },
+    "projects":{
+        "mainText": "Проекти",
+        "AddANewProjects": "Добавить новий проект",
+        "id": "Id",
+        "title": "Title",
+        "locationX": "locationX",
+        "locationY": "locationY",
+        "goal": "goal",
+        "expirationDate": "expirationDate"
+    },
+    "project":{
+        "title": {
+            "placeHolder": "Название проекта...",
+            "title": "Название проекта:",
+            "required" : "Название должно быть."
+        },
+        "lon":{
+            "placeHolder": "Долгота...",
+            "title": "Долгота",
+            "required": "Долгота должна быть",
+            "pattern": "Долгота не соотвецтвует требованиям"
+        },
+        "lat":{
+            "placeHolder": "Ширина...",
+            "title": "Ширина",
+            "required": "Ширина должна быть",
+            "pattern": "Ширина не соотвецтвует требованиям"
+        },
+        "goal":{
+            "placeHolder": "Цель...",
+            "title": "Цель",
+            "pattern": "Цель не соотвецтвует требованиям"
+        },
+        "expirationDate":{
+            "placeHolder": "Дата завершения...",
+            "title": "Дата завершения",
+            "required": "дата должна быть"
+        }
+    },
+    "buttons":{
+        "save": "сохранить",
+        "create": "создать",
+        "cancel": "отменить"
+    },
+    "LangButton":{
+        "en" : "английский",
+        "ru" : "русский",
+        "ua" : "украинский"
+    }
+}

@@ -1,0 +1,62 @@
+{
+    "Loading": "ANIME...",
+    "header": {
+        "title": "Admin",
+        "projects": "Projects",
+        "chats": "Chats"
+    },
+    "Index":{
+        "title": "CUAFunding new crowdfunding system",
+        "MainBody": "CUAFunding is your contribution to a strong and open society where you can raise money for a project. Find start-up capital for social business, money to develop an invention, make a movie and more. Become a co-founder of good deeds - support the best projects with funds",
+        "": ""
+    },
+    "projects":{
+        "mainText": "Project",
+        "AddANewProjects": "Add a new Projects",
+        "id": "Id",
+        "title": "Title",
+        "locationX": "locationX",
+        "locationY": "locationY",
+        "goal": "goal",
+        "expirationDate": "expirationDate"
+    },
+    "project":{
+        "title": {
+            "placeHolder": "Project title...",
+            "title": "Project title:",
+            "required" : "Title is required."
+        },
+        "lon":{
+            "placeHolder": "Lon...",
+            "title": "Lon",
+            "required": "Lon is required",
+            "pattern": "Lon not by pattern"
+        },
+        "lat":{
+            "placeHolder": "Lat...",
+            "title": "Lat",
+            "required": "Lat is required",
+            "pattern": "Lat not by pattern"
+        },
+        "goal":{
+            "placeHolder": "Goal...",
+            "title": "Goal",
+            "pattern": "goal not by pattern"
+        },
+        "expirationDate":{
+            "placeHolder": "Expiration Date...",
+            "title": "Expiration Date",
+            "required": "date is required"
+        }
+    },
+    "buttons":{
+        "save": "save",
+        "create": "create",
+        "cancel": "cancel"
+    },
+    "LangButton":{
+        "en" : "english",
+        "ru" : "russia",
+        "ua" : "ukraine"
+    }
+}

@@ -61,13 +61,13 @@ export class ProjectEditComponent
     this.form = this.fb.group({
       title: ['', Validators.required],
       locationX: ['', [
-        Validators.required, Validators.pattern(/^[-]?[0-9]+(\.[0-9]{1,4})?$/)
+        Validators.required, Validators.pattern(/^[-]?[0-9]+(\.[0-9]{1,16})?$/)
       ]],
       locationY: ['', [
-        Validators.required, Validators.pattern(/^[-]?[0-9]+(\.[0-9]{1,4})?$/)
+        Validators.required, Validators.pattern(/^[-]?[0-9]+(\.[0-9]{1,16})?$/)
       ]],
       goal: ['', [
-         Validators.pattern(/^[-]?[0-9]+(\.[0-9]{1,4})?$/)
+         Validators.pattern(/^[-]?[0-9]+(\.[0-9]{1,6})?$/)
       ]],
       expirationDate: ['', Validators.required]
     })
@@ -75,6 +75,18 @@ export class ProjectEditComponent
     // react to form changes
     this.form.valueChanges
       .subscribe(val => {
+        console.log("valueChanges long: " + this.longitude)
+        console.log("valueChanges latitude: " + this.latitude)
+    
+        // this.project.locationX = this.longitude;
+        // this.project.locationY = this.latitude;
+
+    if(this.projects.length>0){
+      this.projects.pop();
+    }
+
+    this.projects.push(this.project);
+
         if (!this.form.dirty) {
           this.log("Form Model has been loaded.");
         }
@@ -99,11 +111,11 @@ export class ProjectEditComponent
     console.log("lat:" + $event.coords.lat);
     console.log("lng:" + $event.coords.lng);
     
-    this.longitude = $event.coords.lng;
-    this.latitude = $event.coords.lat;
+    this.longitude = $event.coords.lat;
+    this.latitude = $event.coords.lng;
     
-    this.project.locationX = this.longitude;
-    this.project.locationY = this.latitude;
+    this.project.locationX = this.latitude;
+    this.project.locationY = this.longitude;
     this.project.title = "lat:" + $event.coords.lat + "lng:" + $event.coords.lng;
 
     if(this.projects.length>0){
@@ -137,13 +149,13 @@ export class ProjectEditComponent
         .subscribe(result => {
         this.project = result;
         this.title = "Edit - " + this.project.title;
-
+        this.zoom=12;
         // update the form with the city value
         this.form.patchValue(this.project);
 
         if(this.project){
-          this.longitude = this.project.locationX;
-          this.latitude = this.project.locationY;
+          this.longitude = this.project.locationY;
+          this.latitude = this.project.locationX;
           this.projects = [];
           this.projects.push(this.project);
         }
@@ -161,8 +173,8 @@ export class ProjectEditComponent
     var project = (this.id) ? this.project : <Project>{};
 
     project.title = this.form.get("title").value;
-    project.locationX = +this.form.get("locationX").value;
-    project.locationY = +this.form.get("locationY").value;
+    project.locationY = +this.form.get("locationX").value;
+    project.locationX = +this.form.get("locationY").value;
     project.goal = +this.form.get("goal").value;
     project.expirationDate = this.form.get("expirationDate").value;
 
@@ -193,6 +205,7 @@ export class ProjectEditComponent
           // go back to cities view
           this.router.navigate(['/admin/projects']);
         }, error => console.error(error));
+        this.router.navigate(['/admin/projects']);
     }
   }
 }
