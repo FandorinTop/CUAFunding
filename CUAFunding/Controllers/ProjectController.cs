@@ -90,9 +90,11 @@ namespace CUAFunding.Controllers
 
             _logger.LogInformation($"Successfull created  project with name: {viewModel.Title}");
 
+            return Ok();
             return Ok("Project Id: " + projId);
         }
 
+        //[AllowAnonymous]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProject(string id)
         {
@@ -116,7 +118,7 @@ namespace CUAFunding.Controllers
         {
             try
             {
-                await _service.ChangeProjectImage(viewModel.Id, viewModel.File);
+                await _service.ChangeProjectImage(viewModel.Id, viewModel.Picture);
             }
             catch (UploadingException ex)
             {

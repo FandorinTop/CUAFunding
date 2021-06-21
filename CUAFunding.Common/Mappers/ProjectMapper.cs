@@ -20,7 +20,7 @@ namespace CUAFunding.Common.Mappers
             viewModel.ExpirationDate = project.ExpirationDate;
             viewModel.LocationX = project.Location.Coordinate.X;
             viewModel.LocationY = project.Location.Coordinate.Y;
-            viewModel.MainImagePath = project.MainImagePath;
+            viewModel.MainImagePath = project.MainImagePath ?? "ProjectFiles//temp.gif";
 
             return viewModel;
         }
@@ -35,6 +35,7 @@ namespace CUAFunding.Common.Mappers
             project.Goal = viewModel.Goal;
             project.ExpirationDate = viewModel.ExpirationDate;
             project.Location = new Point(viewModel.LocationX ?? 0, viewModel.LocationY ?? 0) { SRID = 4326 };
+            project.MainImagePath = viewModel.MainImagePath ?? "ProjectFiles//temp.gif";
 
             return project;
         }
@@ -75,9 +76,9 @@ namespace CUAFunding.Common.Mappers
             viewModel = BaseMapper(project, viewModel) as ShowProjectViewModel;
             viewModel.Id = project.Id;
             viewModel.PageVisitorsCount = project.PageVisitorsCount;
-            viewModel.Сollected = collected;
+            viewModel.Collected = collected;
             viewModel.AvgRating = rating;
-
+            viewModel.MainImagePath = project.MainImagePath ?? "ProjectFiles/temp.gif";
             return viewModel;
         }
 

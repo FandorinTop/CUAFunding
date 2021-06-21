@@ -86,6 +86,7 @@ namespace CUAFunding
                     Version = "1.0.0"
                 });
             });
+            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILogger<Startup> logger)
@@ -101,7 +102,7 @@ namespace CUAFunding
             }
 
             app.ConfigureExceptionHandler(env, logger);
-
+            app.UseCors(builder => builder.AllowAnyOrigin());
             app.UseHttpsRedirection();
             app.UseStaticFiles(new StaticFileOptions
             {

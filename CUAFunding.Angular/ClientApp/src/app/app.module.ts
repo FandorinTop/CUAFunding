@@ -19,6 +19,8 @@ import { MapComponent } from './map/map.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MainMapComponent } from './mainMap/mainMap.component';
+import { FileuploadComponent } from './fileUploader/fileupload.component';
 //import { FooterComponent } from './footer/footer.component';
 
 export function HttpLoaderFactory(http: HttpClient){
@@ -35,8 +37,9 @@ export function HttpLoaderFactory(http: HttpClient){
     FetchDataComponent,
     ProjectComponent,
     ProjectEditComponent,
-    //FooterComponent,
-    MapComponent
+    MainMapComponent,
+    MapComponent,
+    FileuploadComponent
   ],
   exports:[
     //FooterComponent

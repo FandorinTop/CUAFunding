@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CUAFunding.Controllers
 {
-    [Authorize(Policy = "Admin")]
+    [Authorize]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {

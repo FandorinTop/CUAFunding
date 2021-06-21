@@ -1,5 +1,7 @@
 <div class="project-edit">
     <h1>{{title}}</h1>
+    
+    
 
     <p *ngIf="this.id && !project">
       <em>        
@@ -28,6 +30,15 @@
       <div>Longitude: {{longitude}}</div>  
     </div> 
     </div>
+
+<div *ngIf="this.id && project" class="form-group">
+  
+  <button type="button"
+  (click)="onDelete()"
+  class="btn btn-danger">
+  Delete
+</button>
+</div>
 
 
     <div class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -151,13 +162,15 @@
                 {{'buttons.create' | translate}}
         </button>
         <button type="button"
-                [routerLink]="['/cities']"
+                [routerLink]="['/admin/projects']"
                 class="btn">
                 {{'buttons.cancel' | translate}}
         </button>
       </div>
       </div>
 </div>
+
+<app-fileupload></app-fileupload>
 
 <!-- Form debug info panel -->
 <div class="card bg-light mb-3">
@@ -188,3 +201,4 @@
     </div>
   </div>
 </div>
+

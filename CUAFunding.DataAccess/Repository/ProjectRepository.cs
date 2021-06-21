@@ -34,7 +34,7 @@ namespace CUAFunding.DataAccess.Repository
                 OwnerId = proj.OwnerId,
                 PageVisitorsCount = proj.PageVisitorsCount,
                 AvgRating = proj.Marks.Average(mark => mark.Value),
-                Сollected = proj.Donations.Sum(donation => donation.Value),
+                Collected = proj.Donations.Sum(donation => donation.Value),
                 Title = proj.Title,
                 Goal = proj.Goal,
                 LocationX = proj.Location.Coordinate.X,
@@ -74,6 +74,14 @@ namespace CUAFunding.DataAccess.Repository
             var count = await source.CountAsync();
 
             var data = await skipedSource.ToListAsync();
+
+            foreach (var item in data)
+            {
+                item.MainImagePath = item.MainImagePath ?? "ProjectFiles//temp.gif";
+                item.MainImagePath = "https://localhost:5001/" + item.MainImagePath;
+                item.Collected = item.Collected ?? 0;
+                item.AvgRating = Math.Round(20 * item.AvgRating ?? 0);
+            }
 
             return new ApiResult<ShowProjectViewModel>(
                 data,
@@ -116,7 +124,7 @@ namespace CUAFunding.DataAccess.Repository
                 OwnerId = proj.OwnerId,
                 PageVisitorsCount = proj.PageVisitorsCount,
                 AvgRating = proj.Marks.Average(mark => mark.Value),
-                Сollected = proj.Donations.Sum(donation => donation.Value),
+                Collected = proj.Donations.Sum(donation => donation.Value),
                 Title = proj.Title,
                 Goal = proj.Goal,
                 LocationX = proj.Location.Coordinate.X,
@@ -161,6 +169,14 @@ namespace CUAFunding.DataAccess.Repository
             var count = await source.CountAsync();
 
             var data = await skipedSource.ToListAsync();
+
+            foreach (var item in data)
+            {
+                item.MainImagePath = item.MainImagePath ?? "ProjectFiles//temp.gif";
+                item.MainImagePath = "https://localhost:5001/" + item.MainImagePath;
+                item.Collected = item.Collected ?? 0;
+                item.AvgRating = Math.Round(20 * item.AvgRating ?? 0);
+            }
 
             return new ApiResult<ShowProjectViewModel>(
                 data,

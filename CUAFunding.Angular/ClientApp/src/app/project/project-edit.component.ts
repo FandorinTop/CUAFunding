@@ -168,6 +168,14 @@ export class ProjectEditComponent
     }
   }
 
+  onDelete(){
+    this.projectService
+    .delete(this.id)
+    .subscribe(retult => {
+      this.router.navigate(['/admin/projects']);
+    });
+  }
+
   onSubmit() {
 
     var project = (this.id) ? this.project : <Project>{};
@@ -199,13 +207,11 @@ export class ProjectEditComponent
       this.projectService
         .post<Project>(project)
         .subscribe(result => {
-
-          console.log("Project " + result.id + " has been created.");
+          this.router.navigate(['/admin/projects']);
 
           // go back to cities view
           this.router.navigate(['/admin/projects']);
         }, error => console.error(error));
-        this.router.navigate(['/admin/projects']);
     }
   }
 }

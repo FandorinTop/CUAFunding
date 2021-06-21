@@ -10,6 +10,11 @@ namespace CUAFunding.BusinessLogic.Services
     {
         private readonly ApplicationDbContext _context;
 
+        public DonationService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<bool> AddDonation(AddDonationViewModel viewModel)
         {
             var project = await _context.Projects.FindAsync(viewModel.ProjectId);

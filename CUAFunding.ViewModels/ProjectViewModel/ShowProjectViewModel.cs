@@ -12,7 +12,7 @@ namespace CUAFunding.ViewModels.ProjectViewModel
     {
         public IEnumerable<DonationViewItem> Donations;
         public string Id { get; set; }
-        public decimal? Сollected { get; set; }
+        public decimal? Collected { get; set; }
         public int PageVisitorsCount { get; set; }
         public double? AvgRating { get; set; }
 

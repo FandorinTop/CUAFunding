@@ -57,4 +57,10 @@ import { Project } from './project';
           console.log("Project:" + item);
           return this.http.post<Project>(url, item);
       }
+
+      delete(id: string): Observable<string>{
+        var url = this.baseUrl + "api/Project/" + id;
+        console.log("delete url: " + url);
+        return this.http.delete<string>(url);
+      }
   }

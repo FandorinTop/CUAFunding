@@ -217,6 +217,10 @@ namespace CUAFunding.IdentityServer
 
                 var amin =  userManager.FindByNameAsync("SuperAdmin1").GetAwaiter().GetResult();
 
+                if (!roleManager.RoleExistsAsync("User").GetAwaiter().GetResult())
+                {
+                    var roleResult = roleManager.CreateAsync(new ApplicationRole("User") { Id = Guid.NewGuid().ToString() }).GetAwaiter().GetResult();
+                }
                 if (!roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
                 {
                     var roleResult = roleManager.CreateAsync(new ApplicationRole("Admin") { Id = Guid.NewGuid().ToString() }).GetAwaiter().GetResult();

@@ -106,15 +106,15 @@ namespace CUAFunding.BusinessLogic.Services
             var project = await _projectRepository.Find(Id);
             var userId = GetUserId();
 
-            var (isCorrectUser, message)= CheckUserId(userId, project);
-            if (!isCorrectUser)
-            {
-                throw new AuthorizationException(message);
-            }
+            //var (isCorrectUser, message)= CheckUserId(userId, project);
+            //if (!isCorrectUser)
+            //{
+            //    throw new AuthorizationException(message);
+            //}
 
             if (file != null)
             {
-                path = await _fileServerProvider.LoadFilesAsync(Path.Combine(_currentDirectory, $"{project.Title ?? "Unanamed"}"), file, new List<EnalableFileExtensionTypes>() { EnalableFileExtensionTypes.jpg, EnalableFileExtensionTypes.jpeg, EnalableFileExtensionTypes.png });
+                path = await _fileServerProvider.LoadFilesAsync(Path.Combine(_currentDirectory, $"{project.Title ?? "Unanamed"}"), file, new List<EnalableFileExtensionTypes>() { EnalableFileExtensionTypes.jpg, EnalableFileExtensionTypes.jpeg, EnalableFileExtensionTypes.png, EnalableFileExtensionTypes.gif });
             }
             if (!String.IsNullOrEmpty(project.MainImagePath))
             {

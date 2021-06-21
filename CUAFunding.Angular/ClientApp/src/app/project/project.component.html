@@ -96,12 +96,28 @@
           
         <agm-info-window>
           <!-- <a >{{p.id}}</a> -->
-          <strong>Title: {{p.title}} </strong> <br/>
-          <strong>Goal: {{p.goal}}</strong> <br/>
-          <strong><a [routerLink]="['/admin/project', p.id]">visitPage</a></strong>
+          <div style='float:left'>
+            <a [routerLink]="['/admin/project', p.id]"><img [src]="p.mainImagePath" height="40" width="40"></a>
+          </div>
+          <div style='float:right; padding: 10px;'>
+            <strong><a [routerLink]="['/admin/project', p.id]">visitPage</a></strong> <br/>
+            <strong>Title: {{p.title}} </strong> <br/>
+            <strong>Goal: {{p.goal}}</strong> <br/>
+            <strong *ngIf="p.collected"> Collected: {{p.collected}}</strong> <br/>
+            <strong *ngIf="p.collected"> Left: {{p.goal - p.collected}}</strong> <br/>
+            <div *ngIf="p.avgRating">
+            <label>Rating</label>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" [style.width.%]="p.avgRating">{{p.avgRating}}</div>
+            </div>
+          </div>
+          </div>
+
+          
+          <!-- <img src="p.mainImagePath" alt="'https://localhost:5001/'+p.mainImagePath"><br/> -->
+
         </agm-info-window>
         
       </agm-marker>
-        <!-- <agm-marker *ngIf="!project" [latitude]="project.locationY" [longitude]="project.locationX" [markerDraggable]="true"></agm-marker> -->
       </agm-map>
     </div>

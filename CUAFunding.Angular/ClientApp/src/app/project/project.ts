@@ -4,5 +4,8 @@ export interface Project {
     locationX: number;
     locationY: number;
     goal: number;
+    collected: number;
+    avgRating: number;
     expirationDate: string;
+    mainImagePath: string;
 }

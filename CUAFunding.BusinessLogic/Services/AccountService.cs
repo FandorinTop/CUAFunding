@@ -61,21 +61,23 @@ namespace CUAFunding.BusinessLogic.Services
             }
             else
             {
-                await RegisterExternal(name.Value, email.Value, new UserLoginInfo(externalProvider, externalUserId, externalProvider));
+                await RegisterExternal(name.Value, email.Value, userIdClaim.Value, new UserLoginInfo(externalProvider, externalUserId, externalProvider));
             }
         }
 
-        public async Task RegisterExternal(string userName, string email, UserLoginInfo info)
+        public async Task RegisterExternal(string userName, string id, string email, UserLoginInfo info)
         {
 
             var user = new ApplicationUser()
             {
+                Id = id ?? Guid.NewGuid().ToString(),
                 UserName = email,
                 Email = email,
                 NormalizedUserName = userName
             };
 
             var result = await _userManager.CreateAsync(user);
+            await _userManager.AddToRoleAsync(user, "User");
             if (result.Succeeded)
             {
                     var identityResult = await _userManager.AddLoginAsync(user, info);
@@ -116,6 +118,9 @@ namespace CUAFunding.BusinessLogic.Services
             {
                 throw new AuthorizationException("Registration error") { ErrorMessages = result.Errors.Select(item => item.Description).ToList()};
             }
+
+            await _userManager.AddToRoleAsync(user, "User");
+
             var registredUser = await _userManager.FindByNameAsync(viewModel.Email);
         }
 
