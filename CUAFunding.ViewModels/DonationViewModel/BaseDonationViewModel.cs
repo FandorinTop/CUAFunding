@@ -10,6 +10,8 @@ namespace CUAFunding.ViewModels.BaseViewModel
 
         public string Message { get; set; }
 
+        public string Email { get; set; }
+       
         public decimal Value { get; set; }
     }
 }

@@ -47,7 +47,7 @@ export class DonationComponent extends BaseFormComponent implements OnInit {
 
 
 
-    this.donation.userId = this.form.get("email").value;
+    this.donation.email = this.form.get("email").value;
     this.donation.message = this.form.get("message").value;
     this.donation.value = +this.form.get("value").value;
     this.donation.projectId = this.data;

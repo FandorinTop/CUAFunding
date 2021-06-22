@@ -11,6 +11,6 @@ namespace CUAFunding.Interfaces.Mappers
         public Donation Create(AddDonationViewModel viewModel);
         public Donation Edit(Donation donation, EditDonationViewModel viewModel);
         public EditDonationViewModel Edit(Donation donation);
-        public ShowDonationsViewModel Show(IEnumerable<Donation> donations);
+        public IEnumerable<ShowDonationsViewModel> Show(IEnumerable<Donation> donations);
     }
 }

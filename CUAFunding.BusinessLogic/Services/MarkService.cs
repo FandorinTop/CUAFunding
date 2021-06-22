@@ -34,6 +34,14 @@ namespace CUAFunding.BusinessLogic.Services
             return result >= 0 ? true : false;
         }
 
+        public async Task<int> GetMark(string projectId, string userId)
+        {
+            var mark = await _context.Marks
+                           .FirstOrDefaultAsync(item => item.ProjectId == projectId && item.UserId == userId);
+
+            return mark.Value;
+        }
+
         public async Task<bool> UpdateMark(EditMarkViewModel viewModel)
         {
             var mark = await _context.Marks

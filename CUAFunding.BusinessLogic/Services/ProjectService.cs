@@ -6,6 +6,7 @@ using CUAFunding.Interfaces.BussinessLogic.Services;
 using CUAFunding.Interfaces.Mappers;
 using CUAFunding.Interfaces.Repository;
 using CUAFunding.ViewModels;
+using CUAFunding.ViewModels.DonationViewModel;
 using CUAFunding.ViewModels.ProjectViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

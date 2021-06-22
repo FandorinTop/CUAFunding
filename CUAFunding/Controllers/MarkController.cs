@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CUAFunding.Controllers
@@ -19,15 +20,38 @@ namespace CUAFunding.Controllers
         IMarkService _service;
         ILogger<MarkController> _logger;
 
+        
+
         public MarkController(IMarkService service, ILogger<MarkController> logger)
         {
             _logger = logger;
             _service = service;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetMark(string projectId)
+        {
+            int responce;
+            try
+            {
+                responce = await _service.GetMark(projectId, GetUserId());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Fail project data update mark in project with id: {projectId} ErrorMessage: {ex.Message}");
+                throw ex;
+            }
+
+            _logger.LogInformation($"Successfull information update mark in project with id: {projectId}");
+
+            return Ok(responce);
+        }
+
         [HttpPut]
         public async Task<IActionResult> EditMark(EditMarkViewModel viewModel)
         {
+            viewModel.UserId = GetUserId();
+
             try
             {
                 await _service.UpdateMark(viewModel);
@@ -59,6 +83,11 @@ namespace CUAFunding.Controllers
             _logger.LogInformation($"Successfull added mark to: {viewModel.ProjectId}");
 
             return Ok(true);
+        }
+
+        private string GetUserId()
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "TEST";
         }
     }
 }

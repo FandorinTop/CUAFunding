@@ -19,6 +19,8 @@ namespace CUAFunding.DomainEntities.Entities
         [Column(TypeName = "decimal(18,2)")]
         public decimal Value { get; set; }
         public string Message { get; set; }
+        public string Email { get; set; }
+
         public Donation() : base()
         {
         }

@@ -27,6 +27,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { DonationComponent } from './donation/donation.component';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { DonationTableComponent } from './donationTable/donationTable.component';
 
 export function HttpLoaderFactory(http: HttpClient){
   return new TranslateHttpLoader(http);
@@ -46,7 +47,8 @@ export function HttpLoaderFactory(http: HttpClient){
     MainMapComponent,
     MapComponent,
     FileuploadComponent,
-    DonationComponent
+    DonationComponent,
+    DonationTableComponent
   ],
   exports:[
     //FooterComponent
@@ -76,7 +78,8 @@ export function HttpLoaderFactory(http: HttpClient){
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'admin/projects', component: ProjectComponent },
       { path: 'admin/project/:id', component: ProjectEditComponent },
-      { path: 'admin/project', component: ProjectEditComponent }
+      { path: 'admin/project', component: ProjectEditComponent },
+      { path: 'admin/donations', component:  DonationTableComponent}
     ]),
     ReactiveFormsModule,
     BrowserAnimationsModule,

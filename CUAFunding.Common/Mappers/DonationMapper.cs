@@ -46,13 +46,12 @@ namespace CUAFunding.Common.Mappers
             return viewModel;
         }
 
-        public ShowDonationsViewModel Show(IEnumerable<Donation> donations)
+        public IEnumerable<ShowDonationsViewModel> Show(IEnumerable<Donation> donations)
         {
-            ShowDonationsViewModel viewModel = new ShowDonationsViewModel();
+            IEnumerable<ShowDonationsViewModel> viewModel;
 
-            viewModel.Donations = donations.Select(viewItem => new DonationViewItem()
+            viewModel = donations.Select(viewItem => new ShowDonationsViewModel()
             {
-                Id = viewItem.Id,
                 ProjectId = viewItem.ProjectId,
                 UserId = viewItem.UserId,
                 Value = viewItem.Value,

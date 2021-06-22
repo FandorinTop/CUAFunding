@@ -1,15 +1,13 @@
-﻿using CUAFunding.ViewModels.BaseViewModel.ViewItems;
+﻿using CUAFunding.ViewModels.BaseViewModel;
+using CUAFunding.ViewModels.BaseViewModel.ViewItems;
 using System.Collections.Generic;
 
 namespace CUAFunding.ViewModels.DonationViewModel
 {
-    public class ShowDonationsViewModel
+    public class ShowDonationsViewModel : BaseDonationViewModel
     {
-        public IEnumerable<DonationViewItem> Donations { get; set; }
+        public string ProjectName { get; set; }
 
-        public ShowDonationsViewModel()
-        {
-            Donations = new List<DonationViewItem>();
-        }
+        public string CreationDate { get; set; }
     }
 }
