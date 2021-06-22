@@ -1,4 +1,33 @@
-{
+{    
+    "Donation":{
+        "Title": "Донати",
+        "Email":{            
+            "PlaceHolder": "Email...",
+            "Title": "Email",
+            "Required": "потрібно ввести еmail",
+            "Pattern" : "це не еmail"
+        },
+        "Value":{            
+            "PlaceHolder": "Сума пожертви...",
+            "Title": "Сума пожертви",
+            "Required": "Це обов'язкове поле"
+        },
+        "Message":{            
+            "PlaceHolder": "Повідомлення...",
+            "Title": "Повідомлення",
+            "Required": "Це обов'язкове поле"
+        }
+    },
+    "Map":{
+    "MapMarker":{
+        "VisitPage": "на сторінку",
+        "Title": "Заголовок",
+        "Goal": "Мета",
+        "Collected": "Зібрано",
+        "Left": "Залишилось",
+        "Rating": "Рейтинг"
+    }
+    },
     "Loading": "Завантаження...",
     "header": {
         "title": "Адмін",
@@ -15,6 +44,11 @@
         "goal": "goal",
         "expirationDate": "expirationDate"
     },
+    "fileUploader":{
+        "picture":"Зображення",
+        "chooseFile": "Обрати файл",
+        "upload": "Завантажити"
+    },
     "Index":{
         "title": "CUAFunding нова краудфандингова  платформа",
         "MainBody": "CUAFunding - це вклад в розвиток сильного і відкритого суспільства, де ти можеш знайти людей які підтримають твій проект. Стань співзасновником добрих справ  – підтримай коштами кращі проекти",
@@ -22,6 +56,8 @@
     },
     "project":{
         "title": {
+            "create": "Створити новий проект",
+            "edit": "Редагування:",
             "placeHolder": "Назва проекту...",
             "title": "Назва проекту:",
             "required" : "Назва має бути"
@@ -52,7 +88,9 @@
     "buttons":{
         "save": "зберігти",
         "create": "створити",
-        "cancel": "відмінити"
+        "cancel": "відмінити",
+        "submit": "підтвердити",
+        "donate": "підтримати"
     },
     "LangButton":{
         "en" : "англійська",

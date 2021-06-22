@@ -1,6 +1,7 @@
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } from '@angular/common/http'
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -14,9 +15,16 @@ export class FileuploadComponent implements OnInit {
   progress: number;
   Id: string;
   public profileForm: FormGroup;
+
+  private snackBarDuration: number = 2000;
+
+
   @ViewChild('labelImport', { static: true })
   labelImport: ElementRef;
-  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string,     private activatedRoute: ActivatedRoute ) {
+  constructor(private http: HttpClient,
+     @Inject('BASE_URL') baseUrl: string, 
+    private snackBar: MatSnackBar,
+    private activatedRoute: ActivatedRoute ) {
     this.baseUrl = baseUrl;
   }
   onSubmit() {
@@ -37,7 +45,10 @@ export class FileuploadComponent implements OnInit {
       }
       if (event.type === HttpEventType.Response) {
         console.log(event.body);
-        this.isUpload = true;
+
+        this.snackBar.open('File uploaded ', '', {
+          duration: this.snackBarDuration
+        });
         this.progress = 0;
         // this.profileForm.reset();
       }

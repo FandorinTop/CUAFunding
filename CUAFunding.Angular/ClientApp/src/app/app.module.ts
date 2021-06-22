@@ -21,7 +21,12 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MainMapComponent } from './mainMap/mainMap.component';
 import { FileuploadComponent } from './fileUploader/fileupload.component';
+import { StarRatingComponent } from './star-rating/star-rating.component';
 //import { FooterComponent } from './footer/footer.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { DonationComponent } from './donation/donation.component';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 export function HttpLoaderFactory(http: HttpClient){
   return new TranslateHttpLoader(http);
@@ -29,6 +34,7 @@ export function HttpLoaderFactory(http: HttpClient){
 
 @NgModule({
   declarations: [
+    StarRatingComponent,
     AppComponent,
     NavMenuComponent,
     BaseFormComponent,
@@ -39,12 +45,15 @@ export function HttpLoaderFactory(http: HttpClient){
     ProjectEditComponent,
     MainMapComponent,
     MapComponent,
-    FileuploadComponent
+    FileuploadComponent,
+    DonationComponent
   ],
   exports:[
     //FooterComponent
   ],
   imports: [
+    MatIconModule,
+    MatSnackBarModule,
     HttpClientModule,
     BrowserModule,
     TranslateModule.forRoot({
@@ -75,7 +84,10 @@ export function HttpLoaderFactory(http: HttpClient){
     AngularMaterialModule,
     NgbModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [    
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
+  ],
+  bootstrap: [AppComponent],
+  entryComponents: [DonationComponent]
 })
 export class AppModule { }

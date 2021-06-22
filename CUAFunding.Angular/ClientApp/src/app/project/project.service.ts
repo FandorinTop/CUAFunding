@@ -45,6 +45,20 @@ import { Project } from './project';
           return this.http.get<Project>(url);
       }
   
+      getStar(id): Observable<number> {
+        var params = new HttpParams()
+        .set("projectId", id.toString())
+        var url = this.baseUrl + "api/Mark/GetMark";
+        console.log("URL:" + url)
+        return this.http.get<number>(url, {params});
+    }
+
+      putStar<Star>(item: Star): Observable<Star> {
+        var url = this.baseUrl + "api/Mark/EditMark";
+        console.log("putStar: URL:" + url)
+        return this.http.put<Star>(url, item);
+      }
+
       put<Project>(item): Observable<Project> {
           var url = this.baseUrl + "api/Project/" + item.id;
           console.log("URL:" + url)

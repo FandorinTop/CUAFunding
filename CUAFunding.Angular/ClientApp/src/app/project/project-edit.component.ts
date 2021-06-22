@@ -4,13 +4,18 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, AsyncValidatorFn }
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { BaseFormComponent } from '../base.form.component';
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-
+import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, Output } from '@angular/core';
+import { StarRatingColor } from '../star-rating/star-rating.component';
 import { ProjectService } from './project.service';
 import { Project } from './project';
 import { ApiResult } from '../base.service';
 import { stringify } from 'querystring';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
+import { Star } from './star';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DonationComponent } from '../donation/donation.component';
+import { Donation } from '../donation/donation';
 
 @Component({
   selector: 'app-project-edit',
@@ -19,6 +24,13 @@ import { MapsAPILoader, MouseEvent } from '@agm/core';
 })
 export class ProjectEditComponent
   extends BaseFormComponent {
+    
+  rating:number = 3;
+  starCount:number = 5;
+  starColor:StarRatingColor = StarRatingColor.accent;
+  starColorP:StarRatingColor = StarRatingColor.primary;
+  starColorW:StarRatingColor = StarRatingColor.warn;
+  private snackBarDuration: number = 2000;
 
   latitude: number = 36;
   longitude: number = 50;
@@ -43,6 +55,8 @@ export class ProjectEditComponent
   activityLog: string = '';
 
   constructor(
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private fb: FormBuilder,
@@ -148,7 +162,7 @@ export class ProjectEditComponent
       this.projectService.get<Project>(this.id)
         .subscribe(result => {
         this.project = result;
-        this.title = "Edit - " + this.project.title;
+        this.title = this.project.title;
         this.zoom=12;
         // update the form with the city value
         this.form.patchValue(this.project);
@@ -161,6 +175,12 @@ export class ProjectEditComponent
         }
         
       }, error => console.error(error));
+
+      this.projectService.getStar(this.id)
+      .subscribe(result => {
+        this.rating = result;
+        console.log("Getted rating: " + result);
+      }, error => console.error(error));
     }
     else {
       // ADD NEW MODE
@@ -172,6 +192,10 @@ export class ProjectEditComponent
     this.projectService
     .delete(this.id)
     .subscribe(retult => {
+      this.snackBar.open('Project with id: ' + this.id + ' deleted', '', {
+        duration: this.snackBarDuration
+      });
+      
       this.router.navigate(['/admin/projects']);
     });
   }
@@ -213,5 +237,26 @@ export class ProjectEditComponent
           this.router.navigate(['/admin/projects']);
         }, error => console.error(error));
     }
+  }
+  onRatingChanged(rating){
+    console.log("onRatingChanged: Rating: " + rating);
+    var star = <Star>{};
+    star.value = rating;
+    star.projectId = this.id;
+    this.projectService.putStar(star).subscribe(
+      result => {
+    }, error => console.error(error));;
+    this.rating = rating;
+  }
+
+  onDonate(){
+    var id = this.activatedRoute.snapshot.paramMap.get('id');
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width="60%";
+    dialogConfig.data = id;
+
+    this.dialog.open(DonationComponent, dialogConfig);
   }
 }

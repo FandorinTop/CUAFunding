@@ -1,6 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Provide sufficient contrast against white background */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.container{
+  margin-top:5%;
+}
+
+.fa{
+  font-size: 50px;
+}
 
 a {
   color: #0366d6;

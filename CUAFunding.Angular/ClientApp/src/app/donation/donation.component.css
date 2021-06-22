@@ -1,9 +1,26 @@
-position: absolute;
-top: 30px;
-left: 50%;
-width: 570px;
-margin-left: -285px;
-z-index: 1010;
-background-color: #fff;
-text-align: left;
-margin-bottom: 50px;
+input.ng-valid {
+    border-left: 5px solid green;
+  }
+  
+  input.ng-invalid.ng-dirty,
+  input.ng-invalid.ng-touched {
+    border-left: 5px solid red;
+  }
+  
+  input.ng-valid ~ .valid-feedback,
+  input.ng-invalid ~ .invalid-feedback {
+    display: block;
+  }
+  
+  agm-map {
+    height: 500px;
+    width: 500px;
+  }
+  
+  * {
+    font-family: Lato;
+  }
+  
+  a {
+    color: darkblue;
+  }

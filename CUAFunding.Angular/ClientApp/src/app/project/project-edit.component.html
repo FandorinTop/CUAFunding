@@ -1,6 +1,8 @@
 <div class="project-edit">
-    <h1>{{title}}</h1>
-    
+
+    <h1 *ngIf="this.id">{{'project.title.edit' | translate}} {{title}}</h1>
+    <h1 *ngIf="!this.id">{{'project.title.create' | translate}}</h1>
+
     
 
     <p *ngIf="this.id && !project">
@@ -32,7 +34,6 @@
     </div>
 
 <div *ngIf="this.id && project" class="form-group">
-  
   <button type="button"
   (click)="onDelete()"
   class="btn btn-danger">
@@ -148,6 +149,18 @@
         </div>
       </div>
 
+      <button mat-icon-button [color]="color" *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i" (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+        <mat-icon>
+          {{showIcon(i)}}
+        </mat-icon>
+      </button>
+      <mat-error *ngIf="starCount == null || starCount == 0">
+        Star count is <strong>required</strong> and cannot be zero
+      </mat-error>
+      <p class="body-2">
+        <mat-star-rating [rating]="rating"  [starCount]="starCount" [color]="starColor" (ratingUpdated)="onRatingChanged($event)"></mat-star-rating>
+      </p>
+      
       <div class="form-group commands">
         <button *ngIf="id" type="submit"
                 (click)="onSubmit()"
@@ -160,6 +173,12 @@
                 [disabled]="form.invalid"
                 class="btn btn-success">
                 {{'buttons.create' | translate}}
+        </button>
+        <button *ngIf="id" type="submit"
+        (click)="onDonate()"
+        [disabled]="form.invalid"
+        class="btn btn-warning">
+        {{'buttons.donate' | translate}}
         </button>
         <button type="button"
                 [routerLink]="['/admin/projects']"

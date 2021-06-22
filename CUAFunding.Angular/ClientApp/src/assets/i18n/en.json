@@ -1,4 +1,33 @@
 {
+    "Donation":{
+        "Title": "Donation",
+        "Email":{            
+            "PlaceHolder": "Email...",
+            "Title": "Email",
+            "Required": "Email is required",
+            "Pattern" : "Email is not email"
+        },
+        "Value":{            
+            "PlaceHolder": "Value...",
+            "Title": "Value",
+            "Required": "Value is required"
+        },
+        "Message":{            
+            "PlaceHolder": "Message...",
+            "Title": "Message",
+            "Required": "Message is required"
+        }
+    },
+    "Map":{
+        "MapMarker":{
+            "VisitPage": "visit page",
+            "Title": "Title",
+            "Goal": "Goal",
+            "Collected": "Collected",
+            "Left": "Left",
+            "Rating": "Rating"
+        }
+    },
     "Loading": "ANIME...",
     "header": {
         "title": "Admin",
@@ -10,9 +39,14 @@
         "MainBody": "CUAFunding is your contribution to a strong and open society where you can raise money for a project. Find start-up capital for social business, money to develop an invention, make a movie and more. Become a co-founder of good deeds - support the best projects with funds",
         "": ""
     },
+    "fileUploader":{
+        "picture":"Picture",
+        "chooseFile": "Choose file",
+        "upload": "Upload"
+    },
     "projects":{
         "mainText": "Project",
-        "AddANewProjects": "Add a new Projects",
+        "AddANewProjects": "Create a new Projects",
         "id": "Id",
         "title": "Title",
         "locationX": "locationX",
@@ -22,6 +56,8 @@
     },
     "project":{
         "title": {
+            "create": "Create a new Project",
+            "edit": "Edit:",
             "placeHolder": "Project title...",
             "title": "Project title:",
             "required" : "Title is required."
@@ -52,7 +88,9 @@
     "buttons":{
         "save": "save",
         "create": "create",
-        "cancel": "cancel"
+        "cancel": "cancel",
+        "submit": "submit",
+        "donate": "donate"
     },
     "LangButton":{
         "en" : "english",
