@@ -1,0 +1,99 @@
+{    "Donation":{
+    "Title": "Донати",
+    "Email":{            
+        "PlaceHolder": "Email...",
+        "Title": "Email",
+        "Required": "Введите еmail",
+        "Pattern" : "Это не еmail"
+    },
+    "Value":{            
+        "PlaceHolder": "Сума платежа...",
+        "Title": "Сума платежа",
+        "Required": "Это поле обязательно"
+    },
+    "Message":{            
+        "PlaceHolder": "Сообщение...",
+        "Title": "Сообщение",
+        "Required": "Это поле обязательно"
+    }
+},
+    "Map":{
+        "MapMarker":{
+            "VisitPage": "на страницу",
+            "Title": "Заголовок",
+            "Goal": "Цель",
+            "Collected": "Собрано",
+            "Left": "Осталось",
+            "Rating": "Рейтинг"
+        }
+    },
+    "Loading": "Загрузка...",
+    "header": {
+        "title": "Админ",
+        "projects": "Проекти",
+        "chats": "Чаты"
+    },
+    "Index":{
+        "title": "CUAFunding новая краудфандинговая платформа",
+        "MainBody": "CUAFunding - это твой вклад в развитие сильного и открытого общества, где ты можешь собрать деньги на проект. Стань соучасником добрых дел или поддержи их финансово.",
+        "": ""
+    },
+    "fileUploader":{
+        "picture":"Изображение",
+        "chooseFile": "Выбрать файл",
+        "upload": "Загрузить"
+    },
+    "projects":{
+        "mainText": "Проекти",
+        "AddANewProjects": "Добавить новий проект",
+        "id": "Id",
+        "title": "Title",
+        "locationX": "locationX",
+        "locationY": "locationY",
+        "goal": "goal",
+        "expirationDate": "expirationDate"
+    },
+    "project":{
+        "title": {
+            "create": "Создать новий проект",
+            "edit": "Редактирование:",
+            "placeHolder": "Название проекта...",
+            "title": "Название проекта:",
+            "required" : "Название должно быть."
+        },
+        "lon":{
+            "placeHolder": "Долгота...",
+            "title": "Долгота",
+            "required": "Долгота должна быть",
+            "pattern": "Долгота не соотвецтвует требованиям"
+        },
+        "lat":{
+            "placeHolder": "Ширина...",
+            "title": "Ширина",
+            "required": "Ширина должна быть",
+            "pattern": "Ширина не соотвецтвует требованиям"
+        },
+        "goal":{
+            "placeHolder": "Цель...",
+            "title": "Цель",
+            "pattern": "Цель не соотвецтвует требованиям"
+        },
+        "expirationDate":{
+            "placeHolder": "Дата завершения...",
+            "title": "Дата завершения",
+            "required": "дата должна быть"
+        }
+    },
+    "buttons":{
+        "save": "сохранить",
+        "create": "создать",
+        "cancel": "отменить",
+        "submit": "подтвердить",
+        "donate": "поддержать"
+    },
+    "LangButton":{
+        "en" : "английский",
+        "ru" : "русский",
+        "ua" : "украинский"
+    }
+}

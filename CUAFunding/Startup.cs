@@ -1,10 +1,21 @@
+using CUAFunding.Common.Extensions;
+using CUAFunding.Configurations;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
+using System;
+using System.IO;
 
 namespace CUAFunding
 {
@@ -17,55 +28,117 @@ namespace CUAFunding
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-            // In production, the Angular files will be served from this directory
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var logger = actionContext.HttpContext.RequestServices.GetRequiredService<ILogger<ApiBehaviorOptions>>();
+                    var result = new BadRequestObjectResult(actionContext.ModelState);
+                    logger.LogWarning($"Validation Error at path: {actionContext.HttpContext.Request.Path}");
+
+                    return result;
+                };
+            });
+
+            services.AddAuthentication(config =>
+            {
+                config.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                config.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, config =>
+                {
+                    config.Authority = "https://localhost:8000";
+                    config.ClientId = "CUAFunding_id_client";
+                    config.ClientSecret = "CUAFunding_id_secret_client";
+                    config.SaveTokens = true;
+                    config.RequireHttpsMetadata = true;
+                    config.ResponseType = "code";
+                    config.Scope.Add("offline_access");
+                    config.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ClockSkew = TimeSpan.FromSeconds(500)
+                    };
+                });
+
+            services.AddHttpClient();
+            services.InjectDependencies(Configuration);
+            services.InjectDataBase(Configuration);
+
+            services.AddControllersWithViews()
+                .AddJsonOptions(options => {
+                options.JsonSerializerOptions.WriteIndented = true;
+            }); 
+
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                configuration.RootPath = "../CUAFunding.Angular/ClientApp/dist";
             });
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Description = "Swagger API v1",
+                    Title = "Swagger",
+                    Version = "1.0.0"
+                });
+            });
+            services.AddCors();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILogger<Startup> logger)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.IsTesting())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
+            app.ConfigureExceptionHandler(env, logger);
+            app.UseCors(builder => builder.AllowAnyOrigin());
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            if (!env.IsDevelopment())
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, Configuration["ProjectRoot:DirectoryRoot"])), RequestPath= Configuration["ProjectRoot:RequestPath"]
+            });
+            if (!env.IsDevelopment() || env.IsTesting())
             {
                 app.UseSpaStaticFiles();
             }
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(options =>
+            {
+                options.DocumentTitle = "Title";
+                options.RoutePrefix = "docs";
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger UI");
+                options.DocExpansion(DocExpansion.Full);
+            });
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                    pattern: "{controller}/{action=Index}/{Id?}");
             });
 
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
+                spa.Options.SourcePath = "../CUAFunding.Angular/ClientApp";
 
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
+                if (env.IsDevelopment() || env.IsTesting())
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }

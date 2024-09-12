@@ -1,0 +1,76 @@
+<div class="modal-header bg-primary text-white">
+    <h4 class="modal-title" id="modal-basic-title">            {{'Donation.Title' | translate}}
+    </h4>
+</div>
+<div class="modal-body">
+    <div class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="label"> 
+            {{'Donation.Email.Title' | translate}}
+        </label>
+        <br />
+        <input
+        type="email" id="email"
+               formControlName="email" required
+               placeholder="{{'Donation.Email.PlaceHolder' | translate}}"
+               class="form-control" />
+
+        <div *ngIf="form.get('email').invalid &&
+                 (form.get('email').dirty || form.get('email').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('email').errors?.required">
+            {{'Donation.Email.Required' | translate}}
+          </div>
+          <div *ngIf="form.get('email').errors?.email">
+            {{'Donation.Email.Pattern' | translate}}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">
+        {{'Donation.Message.Title' | translate}}
+      </label>
+        <br />
+        <input type="text" id="message"
+               formControlName="message" required
+               placeholder="{{'Donation.Message.PlaceHolder' | translate}}"
+               class="form-control" />
+
+        <div *ngIf="form.get('message').invalid &&
+                 (form.get('message').dirty || form.get('message').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('message').errors?.required">
+            {{'Donation.Message.Required' | translate}}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="iso2"> 
+          {{'Donation.Value.Title' | translate}}
+        </label>
+        <br />
+        <input 
+        type="text" id="value"
+               formControlName="value" required
+               placeholder="{{'Donation.Value.Title' | translate}}"
+               class="form-control" />
+
+        <div *ngIf="form.get('value').invalid &&
+                 (form.get('value').dirty || form.get('value').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('value').errors?.required">
+            {{'Donation.Value.Required' | translate}}
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" [disabled]="form.invalid" type="submit" (click)="onSubmit()" class="btn btn-outline-dark"  (click)="modal.close('Yes')">        {{'buttons.save' | translate}}
+        </button>
+        <button type="button" class="btn btn-outline-dark" (click)="onClose()">        {{'buttons.cancel' | translate}}
+        </button>
+    </div>
+</div>

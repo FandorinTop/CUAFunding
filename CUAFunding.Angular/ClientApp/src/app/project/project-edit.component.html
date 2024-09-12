@@ -1,0 +1,223 @@
+<div class="project-edit">
+
+    <h1 *ngIf="this.id">{{'project.title.edit' | translate}} {{title}}</h1>
+    <h1 *ngIf="!this.id">{{'project.title.create' | translate}}</h1>
+
+    
+
+    <p *ngIf="this.id && !project">
+      <em>        
+        {{'Loading' | translate}}
+      </em>
+    </p>
+    
+    <div class="form-group">   
+      <div class="form-group">
+      <agm-map [latitude]="longitude" [longitude]="latitude" [zoom]="zoom" (mapClick)="mapClicked($event)">
+        <agm-marker 
+          *ngFor="let p of projects; let i = index"
+          (markerClick)="clickedMarker(p.title, i)"
+          [latitude]="p.locationY"
+          [longitude]="p.locationX"
+          [label]="">
+          
+        <agm-info-window>
+          <strong>{{p.title}}</strong>
+        </agm-info-window>
+        
+      </agm-marker>
+        <!-- <agm-marker *ngIf="!project" [latitude]="project.locationY" [longitude]="project.locationX" [markerDraggable]="true"></agm-marker> -->
+      </agm-map>
+      <div>Latitude: {{latitude}}</div>
+      <div>Longitude: {{longitude}}</div>  
+    </div> 
+    </div>
+
+<div *ngIf="this.id && project" class="form-group">
+  <button type="button"
+  (click)="onDelete()"
+  class="btn btn-danger">
+  Delete
+</button>
+</div>
+
+
+    <div class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">
+        {{'project.title.title' | translate}}
+      </label>
+        <br />
+        <input type="text" id="title"
+               formControlName="title" required
+               placeholder="{{'project.title.placeHolder' | translate}}"
+               class="form-control" />
+
+        <div *ngIf="form.get('title').invalid &&
+                 (form.get('title').dirty || form.get('title').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('title').errors?.required">
+            {{'project.title.required' | translate}}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="iso2"> 
+            {{'project.lon.title' | translate}}
+        </label>
+        <br />
+        <input [(ngModel)]="longitude"
+        type="text" id="locationX"
+               formControlName="locationX" required
+               placeholder="{{'project.lon.placeHolder' | translate}}"
+               class="form-control" />
+
+        <div *ngIf="form.get('locationX').invalid &&
+                 (form.get('locationX').dirty || form.get('locationX').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('locationX').errors?.required">
+            {{'project.lon.required' | translate}}
+          </div>
+          <div *ngIf="form.get('locationX').errors?.pattern">
+            {{'project.lon.pattern' | translate}}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="locationY">
+          {{'project.lat.title' | translate}}
+        </label>
+        <br />
+        <input [(ngModel)]="latitude"
+        type="text" id="locationY"
+               formControlName="locationY" required
+               placeholder="{{'project.lat.placeHolder' | translate}}"
+               class="form-control" />
+
+        <div *ngIf="form.get('locationY').invalid &&
+                 (form.get('locationY').dirty || form.get('locationY').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('locationY').errors?.required">
+            {{'project.lat.required' | translate}}
+          </div>
+          <div *ngIf="form.get('locationY').errors?.pattern">
+            {{'project.lat.pattern' | translate}}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="goal">
+            {{'project.goal.title' | translate}}
+        </label>
+        <br />
+        <input type="text" id="goal"
+               formControlName="goal" required
+               placeholder="{{'project.goal.placeHolder' | translate}}"
+               class="form-control" />
+
+        <div *ngIf="form.get('goal').invalid &&
+                 (form.get('goal').dirty || form.get('goal').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('goal').errors?.pattern">
+            {{'project.goal.pattern' | translate}}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="expirationDate"> 
+           {{'project.expirationDate.title' | translate}}
+        </label>
+        <br />
+        <input type="date" id="expirationDate"
+               formControlName="expirationDate" required
+               placeholder="{{'project.expirationDate.placeHolder' | translate}}"
+               class="form-control" />
+
+        <div *ngIf="form.get('expirationDate').invalid &&
+                 (form.get('expirationDate').dirty || form.get('expirationDate').touched)"
+             class="invalid-feedback">
+          <div *ngIf="form.get('locationY').errors?.required">
+            {{'project.expirationDate.required' | translate}}
+          </div>
+          <div *ngIf="form.get('expirationDate').errors?.pattern">
+            pattern
+          </div>
+        </div>
+      </div>
+
+      <button mat-icon-button [color]="color" *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i" (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+        <mat-icon>
+          {{showIcon(i)}}
+        </mat-icon>
+      </button>
+      <mat-error *ngIf="starCount == null || starCount == 0">
+        Star count is <strong>required</strong> and cannot be zero
+      </mat-error>
+      <p class="body-2">
+        <mat-star-rating [rating]="rating"  [starCount]="starCount" [color]="starColor" (ratingUpdated)="onRatingChanged($event)"></mat-star-rating>
+      </p>
+      
+      <div class="form-group commands">
+        <button *ngIf="id" type="submit"
+                (click)="onSubmit()"
+                [disabled]="form.invalid"
+                class="btn btn-success">
+                {{'buttons.save' | translate}}
+        </button>
+        <button *ngIf="!id" type="submit"
+                (click)="onSubmit()"
+                [disabled]="form.invalid"
+                class="btn btn-success">
+                {{'buttons.create' | translate}}
+        </button>
+        <button *ngIf="id" type="submit"
+        (click)="onDonate()"
+        [disabled]="form.invalid"
+        class="btn btn-warning">
+        {{'buttons.donate' | translate}}
+        </button>
+        <button type="button"
+                [routerLink]="['/admin/projects']"
+                class="btn">
+                {{'buttons.cancel' | translate}}
+        </button>
+      </div>
+      </div>
+</div>
+
+<app-fileupload></app-fileupload>
+
+<!-- Form debug info panel -->
+<div class="card bg-light mb-3">
+  <div class="card-header">Form Debug Info</div>
+  <div class="card-body">
+    <div class="card-text">
+      <div><strong>Form value:</strong></div>
+      <div class="help-block">
+          {{ form.value | json }}
+      </div>
+      <div class="mt-2"><strong>Form status:</strong></div>
+      <div class="help-block">
+          {{ form.status | json }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Form activity log panel -->
+<div class="card bg-light mb-3">
+  <div class="card-header">Form Activity Log</div>
+  <div class="card-body">
+    <div class="card-text">
+      <div class="help-block">
+        <span *ngIf="activityLog" 
+            [innerHTML]="activityLog"></span>
+      </div>
+    </div>
+  </div>
+</div>
+

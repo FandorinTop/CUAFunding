@@ -1,0 +1,21 @@
+<p></p>
+
+<div class="container">
+    
+    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" (mapClick)="mapClicked($event)">
+      <agm-marker 
+        *ngFor="let p of projects; let i = index"
+        (markerClick)="clickedMarker(p.title, i)"
+        [latitude]="p.locationY"
+        [longitude]="p.locationX"
+        [label]="'ivan'">
+        
+      <agm-info-window>
+        <a [routerLink]="['/admin/project', project.id]">{{p.id}}</a>
+        <strong>{{p.title}}</strong>
+      </agm-info-window>
+      
+    </agm-marker>
+      <!-- <agm-marker *ngIf="!project" [latitude]="project.locationY" [longitude]="project.locationX" [markerDraggable]="true"></agm-marker> -->
+    </agm-map>
+  </div>

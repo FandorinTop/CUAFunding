@@ -1,0 +1,77 @@
+<h1>{{'projects.title' | translate}}</h1>
+
+<p *ngIf="!projects"><em>{{'projects.title' | translate}}</em></p>
+
+<div class="commands text-right" *ngIf="projects">
+  <button type="button"
+          [routerLink]="['/admin/project']"
+          class="btn btn-success">
+          {{'projects.AddANewProjects' | translate}}
+  </button>
+</div>
+
+<mat-form-field [hidden]="!projects">
+    <input matInput (keyup)="loadData($event.target.value)"
+        placeholder="Filter by name (or part of it)...">
+</mat-form-field>
+
+<table mat-table [dataSource]="projects" class="mat-elevation-z8" [hidden]="!projects"
+    matSort (matSortChange)="loadData()"
+    matSortActive="{{defaultSortColumn}}" matSortDirection="{{defaultSortOrder}}">
+
+  <!-- Id Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+    <td mat-cell *matCellDef="let project">
+      <a [routerLink]="['/admin/project', project.id]">{{project.id}}</a>
+    </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+    <td mat-cell *matCellDef="let project">
+      {{project.title}}
+    </td>
+  </ng-container>
+
+  <!-- Lat Column -->
+  <ng-container matColumnDef="locationX">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>locationX</th>
+    <td mat-cell *matCellDef="let project"> {{project.locationX}} </td>
+  </ng-container>
+
+  <!-- Lon Column -->
+  <ng-container matColumnDef="locationY">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>locationY</th>
+    <td mat-cell *matCellDef="let project"> {{project.locationY}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="goal">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>goal</th>
+    <td mat-cell *matCellDef="let project"> {{project.goal}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="expirationDate">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>expirationDate</th>
+    <td mat-cell *matCellDef="let project"> {{project.expirationDate}} </td>
+  </ng-container>
+
+  <!-- CountryName Column -->
+  <!--<ng-container matColumnDef="countryName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Country</th>
+    <td mat-cell *matCellDef="let project">
+      <a [routerLink]="['/country', project.countryId]">{{project.countryName}}</a>
+    </td>
+  </ng-container>-->
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<!-- Pagination directive -->
+<mat-paginator [hidden]="!projects"
+    (page)="getData($event)"
+    [pageSize]="10"
+    [pageSizeOptions]="[10, 20, 50]"
+    showFirstLastButtons></mat-paginator>
